@@ -13,6 +13,7 @@
 		43D0853C2880331600F93724 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43D0853A2880331600F93724 /* LaunchScreen.storyboard */; };
 		43D085632880481800F93724 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D085622880481800F93724 /* Event.swift */; };
 		43D085652880495900F93724 /* EventsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D085642880495900F93724 /* EventsLoader.swift */; };
+		43D0856728804D7D00F93724 /* VividSeatsAPIEventsLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0856628804D7D00F93724 /* VividSeatsAPIEventsLoaderTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +36,7 @@
 		43D085422880331600F93724 /* EventsAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EventsAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		43D085622880481800F93724 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		43D085642880495900F93724 /* EventsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsLoader.swift; sourceTree = "<group>"; };
+		43D0856628804D7D00F93724 /* VividSeatsAPIEventsLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VividSeatsAPIEventsLoaderTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 		43D085452880331600F93724 /* EventsAppTests */ = {
 			isa = PBXGroup;
 			children = (
+				43D0856628804D7D00F93724 /* VividSeatsAPIEventsLoaderTests.swift */,
 			);
 			path = EventsAppTests;
 			sourceTree = "<group>";
@@ -155,6 +158,7 @@
 					};
 					43D085412880331600F93724 = {
 						CreatedOnToolsVersion = 13.2.1;
+						LastSwiftMigration = 1320;
 						TestTargetID = 43D0852B2880331600F93724;
 					};
 				};
@@ -213,6 +217,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43D0856728804D7D00F93724 /* VividSeatsAPIEventsLoaderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
