@@ -14,19 +14,10 @@
 		43D085392880331600F93724 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43D085382880331600F93724 /* Assets.xcassets */; };
 		43D0853C2880331600F93724 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43D0853A2880331600F93724 /* LaunchScreen.storyboard */; };
 		43D085472880331600F93724 /* EventsAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D085462880331600F93724 /* EventsAppTests.swift */; };
-		43D085512880331700F93724 /* EventsAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D085502880331700F93724 /* EventsAppUITests.swift */; };
-		43D085532880331700F93724 /* EventsAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D085522880331700F93724 /* EventsAppUITestsLaunchTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		43D085432880331600F93724 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 43D085242880331600F93724 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 43D0852B2880331600F93724;
-			remoteInfo = EventsApp;
-		};
-		43D0854D2880331700F93724 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43D085242880331600F93724 /* Project object */;
 			proxyType = 1;
@@ -46,9 +37,6 @@
 		43D0853D2880331600F93724 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		43D085422880331600F93724 /* EventsAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EventsAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		43D085462880331600F93724 /* EventsAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsAppTests.swift; sourceTree = "<group>"; };
-		43D0854C2880331700F93724 /* EventsAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EventsAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		43D085502880331700F93724 /* EventsAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsAppUITests.swift; sourceTree = "<group>"; };
-		43D085522880331700F93724 /* EventsAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,13 +54,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		43D085492880331700F93724 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -81,7 +62,6 @@
 			children = (
 				43D0852E2880331600F93724 /* EventsApp */,
 				43D085452880331600F93724 /* EventsAppTests */,
-				43D0854F2880331700F93724 /* EventsAppUITests */,
 				43D0852D2880331600F93724 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -91,7 +71,6 @@
 			children = (
 				43D0852C2880331600F93724 /* EventsApp.app */,
 				43D085422880331600F93724 /* EventsAppTests.xctest */,
-				43D0854C2880331700F93724 /* EventsAppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -116,15 +95,6 @@
 				43D085462880331600F93724 /* EventsAppTests.swift */,
 			);
 			path = EventsAppTests;
-			sourceTree = "<group>";
-		};
-		43D0854F2880331700F93724 /* EventsAppUITests */ = {
-			isa = PBXGroup;
-			children = (
-				43D085502880331700F93724 /* EventsAppUITests.swift */,
-				43D085522880331700F93724 /* EventsAppUITestsLaunchTests.swift */,
-			);
-			path = EventsAppUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -165,24 +135,6 @@
 			productReference = 43D085422880331600F93724 /* EventsAppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		43D0854B2880331700F93724 /* EventsAppUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 43D0855C2880331700F93724 /* Build configuration list for PBXNativeTarget "EventsAppUITests" */;
-			buildPhases = (
-				43D085482880331700F93724 /* Sources */,
-				43D085492880331700F93724 /* Frameworks */,
-				43D0854A2880331700F93724 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				43D0854E2880331700F93724 /* PBXTargetDependency */,
-			);
-			name = EventsAppUITests;
-			productName = EventsAppUITests;
-			productReference = 43D0854C2880331700F93724 /* EventsAppUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -197,10 +149,6 @@
 						CreatedOnToolsVersion = 13.2.1;
 					};
 					43D085412880331600F93724 = {
-						CreatedOnToolsVersion = 13.2.1;
-						TestTargetID = 43D0852B2880331600F93724;
-					};
-					43D0854B2880331700F93724 = {
 						CreatedOnToolsVersion = 13.2.1;
 						TestTargetID = 43D0852B2880331600F93724;
 					};
@@ -221,7 +169,6 @@
 			targets = (
 				43D0852B2880331600F93724 /* EventsApp */,
 				43D085412880331600F93724 /* EventsAppTests */,
-				43D0854B2880331700F93724 /* EventsAppUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -238,13 +185,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		43D085402880331600F93724 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		43D0854A2880331700F93724 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -272,15 +212,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		43D085482880331700F93724 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				43D085512880331700F93724 /* EventsAppUITests.swift in Sources */,
-				43D085532880331700F93724 /* EventsAppUITestsLaunchTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -288,11 +219,6 @@
 			isa = PBXTargetDependency;
 			target = 43D0852B2880331600F93724 /* EventsApp */;
 			targetProxy = 43D085432880331600F93724 /* PBXContainerItemProxy */;
-		};
-		43D0854E2880331700F93724 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 43D0852B2880331600F93724 /* EventsApp */;
-			targetProxy = 43D0854D2880331700F93724 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -524,40 +450,6 @@
 			};
 			name = Release;
 		};
-		43D0855D2880331700F93724 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = bogdan.EventsAppUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = EventsApp;
-			};
-			name = Debug;
-		};
-		43D0855E2880331700F93724 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = bogdan.EventsAppUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = EventsApp;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -584,15 +476,6 @@
 			buildConfigurations = (
 				43D0855A2880331700F93724 /* Debug */,
 				43D0855B2880331700F93724 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		43D0855C2880331700F93724 /* Build configuration list for PBXNativeTarget "EventsAppUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				43D0855D2880331700F93724 /* Debug */,
-				43D0855E2880331700F93724 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
