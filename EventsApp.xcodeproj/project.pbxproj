@@ -11,7 +11,6 @@
 		43D085322880331600F93724 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D085312880331600F93724 /* SceneDelegate.swift */; };
 		43D085392880331600F93724 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43D085382880331600F93724 /* Assets.xcassets */; };
 		43D0853C2880331600F93724 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43D0853A2880331600F93724 /* LaunchScreen.storyboard */; };
-		43D085472880331600F93724 /* EventsAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D085462880331600F93724 /* EventsAppTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,7 +31,6 @@
 		43D0853B2880331600F93724 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		43D0853D2880331600F93724 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		43D085422880331600F93724 /* EventsAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EventsAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		43D085462880331600F93724 /* EventsAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsAppTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,7 +84,6 @@
 		43D085452880331600F93724 /* EventsAppTests */ = {
 			isa = PBXGroup;
 			children = (
-				43D085462880331600F93724 /* EventsAppTests.swift */,
 			);
 			path = EventsAppTests;
 			sourceTree = "<group>";
@@ -200,7 +197,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43D085472880331600F93724 /* EventsAppTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
