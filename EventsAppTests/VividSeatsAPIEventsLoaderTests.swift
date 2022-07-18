@@ -46,6 +46,16 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
         XCTAssertEqual(httpClient.requestedURLs, [url])
     }
     
+    func test_loadTwice_requestsDataTwice() {
+        let url = URL(string: "https://a-concrete-url.com")!
+        let (sut, httpClient) = makeSUT(url: url)
+        
+        sut.load { _ in }
+        sut.load { _ in }
+        
+        XCTAssertEqual(httpClient.requestedURLs, [url, url])
+    }
+    
     private func makeSUT(url: URL = URL(string: "http://a-url.com")!, file: StaticString = #filePath, line: UInt = #line) -> (sut: VividSeatsAPIEventsLoader, httpClient: HTTPClientSpy) {
         let httpClient = HTTPClientSpy()
         let sut = VividSeatsAPIEventsLoader(url: url, httpClient: httpClient)
