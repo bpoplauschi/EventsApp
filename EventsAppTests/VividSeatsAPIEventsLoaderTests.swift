@@ -22,6 +22,7 @@ class VividSeatsAPIEventsLoader {
     
     enum Error: Swift.Error {
         case connectivity
+        case invalidData
     }
     
     init(url: URL, httpClient: HTTPClient) {
@@ -31,7 +32,13 @@ class VividSeatsAPIEventsLoader {
     
     func load(completion: @escaping (Result) -> Void) {
         httpClient.post(to: url) { result in
-            completion(.failure(Error.connectivity))
+            switch result {
+            case let .success(data, response):
+                completion(.failure(Error.invalidData))
+                
+            case .failure:
+                completion(.failure(Error.connectivity))
+            }
         }
     }
 }
@@ -71,6 +78,18 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
         })
     }
     
+    func test_load_deliversErrorOnNon200HTTPResponse() {
+        let (sut, httpClient) = makeSUT()
+        let responseCodes = [199, 201, 300, 400, 401, 404, 500]
+        
+        responseCodes.enumerated().forEach { index, responseCode in
+            expect(sut, toCompleteWith: failure(.invalidData), when: {
+                let json = makeEventsJSONData([])
+                httpClient.complete(withStatusCode: responseCode, data: json, at: index)
+            })
+        }
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(url: URL = URL(string: "http://a-url.com")!, file: StaticString = #filePath, line: UInt = #line) -> (sut: VividSeatsAPIEventsLoader, httpClient: HTTPClientSpy) {
@@ -83,6 +102,13 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
     
     private func failure(_ error: VividSeatsAPIEventsLoader.Error) -> VividSeatsAPIEventsLoader.Result {
         .failure(error)
+    }
+    
+    private typealias JSON = [String: Any]
+    
+    private func makeEventsJSONData(_ events: [JSON]) -> Data {
+        let json = events
+        return try! JSONSerialization.data(withJSONObject: json)
     }
     
     private func expect(_ sut: VividSeatsAPIEventsLoader, toCompleteWith expectedResult: VividSeatsAPIEventsLoader.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
@@ -120,5 +146,10 @@ private class HTTPClientSpy: HTTPClient {
     
     func complete(with error: Error, at index: Int = 0) {
         messages[index].completion(.failure(error))
+    }
+    
+    func complete(withStatusCode code: Int, data: Data, at index: Int = 0) {
+        let response = HTTPURLResponse(url: messages[index].url, statusCode: code, httpVersion: nil, headerFields: nil)!
+        messages[index].completion(.success((data, response)))
     }
 }
