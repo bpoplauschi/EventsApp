@@ -14,6 +14,10 @@ protocol HTTPClient {
     func post(to url: URL, completion: @escaping (Result) -> Void)
 }
 
+struct VividSeatsAPIEvent: Decodable {
+    
+}
+
 class VividSeatsAPIEventsLoader {
     private let url: URL
     private let httpClient: HTTPClient
@@ -33,8 +37,12 @@ class VividSeatsAPIEventsLoader {
     func load(completion: @escaping (Result) -> Void) {
         httpClient.post(to: url) { result in
             switch result {
-            case let .success(data, response):
-                completion(.failure(Error.invalidData))
+            case let .success((data, response)):
+                if response.statusCode == 200, let root = try? JSONDecoder().decode([VividSeatsAPIEvent].self, from: data) {
+                    completion(.success([]))
+                } else {
+                    completion(.failure(Error.invalidData))
+                }
                 
             case .failure:
                 completion(.failure(Error.connectivity))
@@ -96,6 +104,15 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
         expect(sut, toCompleteWith: failure(.invalidData), when: {
             let invalidJSON = Data("invalid json".utf8)
             httpClient.complete(withStatusCode: 200, data: invalidJSON)
+        })
+    }
+    
+    func test_load_deliversNoEventsOn200HTTPResponseWithEmptyListJSON() {
+        let (sut, httpClient) = makeSUT()
+        
+        expect(sut, toCompleteWith: .success([]), when: {
+            let emptyListJSON = makeEventsJSONData([])
+            httpClient.complete(withStatusCode: 200, data: emptyListJSON)
         })
     }
     
