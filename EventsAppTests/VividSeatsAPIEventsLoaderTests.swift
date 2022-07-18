@@ -18,9 +18,15 @@ class VividSeatsAPIEventsLoader {
     private let url: URL
     private let httpClient: HTTPClient
     
+    typealias Result = EventsLoader.Result
+    
     init(url: URL, httpClient: HTTPClient) {
         self.url = url
         self.httpClient = httpClient
+    }
+    
+    func load(completion: @escaping (Result) -> Void) {
+        httpClient.post(to: url) { result in }
     }
 }
 
@@ -29,6 +35,15 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
         let (_, httpClient) = makeSUT()
         
         XCTAssertTrue(httpClient.requestedURLs.isEmpty)
+    }
+    
+    func test_load_requestsData() {
+        let url = URL(string: "https://a-concrete-url.com")!
+        let (sut, httpClient) = makeSUT(url: url)
+        
+        sut.load { _ in }
+        
+        XCTAssertEqual(httpClient.requestedURLs, [url])
     }
     
     private func makeSUT(url: URL = URL(string: "http://a-url.com")!, file: StaticString = #filePath, line: UInt = #line) -> (sut: VividSeatsAPIEventsLoader, httpClient: HTTPClientSpy) {
@@ -44,5 +59,6 @@ private class HTTPClientSpy: HTTPClient {
     var requestedURLs: [URL] = []
     
     func post(to url: URL, completion: @escaping (HTTPClient.Result) -> Void) {
+        requestedURLs.append(url)
     }
 }
