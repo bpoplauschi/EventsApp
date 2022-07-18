@@ -34,6 +34,8 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
     private func makeSUT(url: URL = URL(string: "http://a-url.com")!, file: StaticString = #filePath, line: UInt = #line) -> (sut: VividSeatsAPIEventsLoader, httpClient: HTTPClientSpy) {
         let httpClient = HTTPClientSpy()
         let sut = VividSeatsAPIEventsLoader(url: url, httpClient: httpClient)
+        trackForMemoryLeaks(httpClient)
+        trackForMemoryLeaks(sut)
         return (sut, httpClient)
     }
 }
