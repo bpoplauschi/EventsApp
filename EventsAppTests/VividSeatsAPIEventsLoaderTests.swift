@@ -26,11 +26,15 @@ class VividSeatsAPIEventsLoader {
 
 class VividSeatsAPIEventsLoaderTests: XCTestCase {
     func test_init_doesNotRequestData() {
-        let url = URL(string: "http://a-url.com")!
-        let httpClient = HTTPClientSpy()
-        let sut = VividSeatsAPIEventsLoader(url: url, httpClient: httpClient)
+        let (_, httpClient) = makeSUT()
         
         XCTAssertTrue(httpClient.requestedURLs.isEmpty)
+    }
+    
+    private func makeSUT(url: URL = URL(string: "http://a-url.com")!, file: StaticString = #filePath, line: UInt = #line) -> (sut: VividSeatsAPIEventsLoader, httpClient: HTTPClientSpy) {
+        let httpClient = HTTPClientSpy()
+        let sut = VividSeatsAPIEventsLoader(url: url, httpClient: httpClient)
+        return (sut, httpClient)
     }
 }
 
