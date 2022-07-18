@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Event {
+public struct Event: Equatable {
     public let name: String
     public let location: String
     public let dateInterval: String

@@ -64,24 +64,14 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
     
     func test_load_deliversErrorOnClientError() {
         let (sut, httpClient) = makeSUT()
-        let clientError = NSError(domain: "Test", code: 0)
-        let exp = expectation(description: "Wait for load completion")
         
-        sut.load { result in
-            switch result {
-            case .success:
-                XCTFail("Expected failure, got success instead")
-                
-            case .failure(let error):
-                XCTAssertEqual(error as NSError, VividSeatsAPIEventsLoader.Error.connectivity as NSError)
-            }
-            exp.fulfill()
-        }
-        
-        httpClient.complete(with: clientError)
-        
-        wait(for: [exp], timeout: 1.0)
+        expect(sut, toCompleteWith: failure(.connectivity), when: {
+            let clientError = NSError(domain: "Test", code: 0)
+            httpClient.complete(with: clientError)
+        })
     }
+    
+    // MARK: - Helpers
     
     private func makeSUT(url: URL = URL(string: "http://a-url.com")!, file: StaticString = #filePath, line: UInt = #line) -> (sut: VividSeatsAPIEventsLoader, httpClient: HTTPClientSpy) {
         let httpClient = HTTPClientSpy()
@@ -89,6 +79,33 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
         trackForMemoryLeaks(httpClient)
         trackForMemoryLeaks(sut)
         return (sut, httpClient)
+    }
+    
+    private func failure(_ error: VividSeatsAPIEventsLoader.Error) -> VividSeatsAPIEventsLoader.Result {
+        .failure(error)
+    }
+    
+    private func expect(_ sut: VividSeatsAPIEventsLoader, toCompleteWith expectedResult: VividSeatsAPIEventsLoader.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
+        let exp = expectation(description: "Wait for load completion")
+        
+        sut.load { receivedResult in
+            switch (receivedResult, expectedResult) {
+            case let (.success(receivedEvents), .success(expectedEvents)):
+                XCTAssertEqual(receivedEvents, expectedEvents, file: file, line: line)
+                
+            case let (.failure(receivedError as VividSeatsAPIEventsLoader.Error), .failure(expectedError as VividSeatsAPIEventsLoader.Error)):
+                XCTAssertEqual(receivedError, expectedError, file: file, line: line)
+                
+            default:
+                XCTFail("Expected result \(expectedResult) got \(receivedResult) instead", file: file, line: line)
+            }
+            
+            exp.fulfill()
+        }
+        
+        action()
+        
+        wait(for: [exp], timeout: 1.0)
     }
 }
 
