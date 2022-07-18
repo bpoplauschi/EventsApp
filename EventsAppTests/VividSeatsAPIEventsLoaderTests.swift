@@ -15,7 +15,17 @@ protocol HTTPClient {
 }
 
 struct VividSeatsAPIEvent: Decodable {
-    
+    let topLabel: String
+    let middleLabel: String
+    let bottomLabel: String
+    let eventCount: Int
+    let image: String
+    let targetId: Int
+    let targetType: String
+    let entityId: Int
+    let entityType: String
+    let startDate: Int64
+    let rank: Int
 }
 
 class VividSeatsAPIEventsLoader {
@@ -38,8 +48,11 @@ class VividSeatsAPIEventsLoader {
         httpClient.post(to: url) { result in
             switch result {
             case let .success((data, response)):
-                if response.statusCode == 200, let root = try? JSONDecoder().decode([VividSeatsAPIEvent].self, from: data) {
-                    completion(.success([]))
+                if response.statusCode == 200,
+                    let root = try? JSONDecoder().decode([VividSeatsAPIEvent].self, from: data) {
+                    completion(.success(root.map({ apiEvent in
+                        Event(name: apiEvent.topLabel, location: apiEvent.middleLabel, dateInterval: apiEvent.bottomLabel, count: apiEvent.eventCount, imageURL: URL(string: apiEvent.image))
+                    })))
                 } else {
                     completion(.failure(Error.invalidData))
                 }
@@ -116,6 +129,18 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
         })
     }
     
+    func test_load_deliversEventsOn200HTTPResponseWithEventsJSON() {
+        let (sut, httpClient) = makeSUT()
+        let event1 = makeEvent(name: "a name", location: "a location", dateInterval: "a date interval", count: 1, imageURL: nil)
+        let event2 = makeEvent(name: "another name", location: "another location", dateInterval: "another date interval", count: 2, imageURL: URL(string: "http://any-url.com")!)
+        let events = [event1.event, event2.event]
+        
+        expect(sut, toCompleteWith: .success(events), when: {
+            let jsonData = makeEventsJSONData([event1.json, event2.json])
+            httpClient.complete(withStatusCode: 200, data: jsonData)
+        })
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(url: URL = URL(string: "http://a-url.com")!, file: StaticString = #filePath, line: UInt = #line) -> (sut: VividSeatsAPIEventsLoader, httpClient: HTTPClientSpy) {
@@ -132,7 +157,28 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
     
     private typealias JSON = [String: Any]
     
+    private func makeEvent(name: String, location: String, dateInterval: String, count: Int, imageURL: URL?) -> (event: Event, json: JSON) {
+        let event = Event(name: name, location: location, dateInterval: dateInterval, count: count, imageURL: imageURL)
+        
+        let json = [
+            "topLabel": name,
+            "middleLabel": location,
+            "bottomLabel": dateInterval,
+            "eventCount": count,
+            "image": imageURL?.absoluteString ?? "",
+            "targetId": 2119461,
+            "targetType": "EVENT",
+            "entityId": 9420,
+            "entityType": "PERFORMER",
+            "startDate": 1495242000000,
+            "rank": 260
+        ].compactMapValues { $0 }
+        
+        return (event, json)
+    }
+    
     private func makeEventsJSONData(_ events: [JSON]) -> Data {
+        print(events)
         let json = events
         return try! JSONSerialization.data(withJSONObject: json)
     }
