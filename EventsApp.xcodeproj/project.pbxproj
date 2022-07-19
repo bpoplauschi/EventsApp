@@ -17,6 +17,7 @@
 		437EAE022886E6DF00210E09 /* ImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EAE012886E6DF00210E09 /* ImageDataLoader.swift */; };
 		437EAE042886E78900210E09 /* RemoteImageDataLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EAE032886E78900210E09 /* RemoteImageDataLoaderTests.swift */; };
 		437EAE062886E83C00210E09 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EAE052886E83C00210E09 /* TestHelpers.swift */; };
+		437EAE082886FCFC00210E09 /* RemoteImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EAE072886FCFC00210E09 /* RemoteImageDataLoader.swift */; };
 		43D085302880331600F93724 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0852F2880331600F93724 /* AppDelegate.swift */; };
 		43D085322880331600F93724 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D085312880331600F93724 /* SceneDelegate.swift */; };
 		43D085392880331600F93724 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43D085382880331600F93724 /* Assets.xcassets */; };
@@ -47,6 +48,7 @@
 		437EAE012886E6DF00210E09 /* ImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDataLoader.swift; sourceTree = "<group>"; };
 		437EAE032886E78900210E09 /* RemoteImageDataLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageDataLoaderTests.swift; sourceTree = "<group>"; };
 		437EAE052886E83C00210E09 /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
+		437EAE072886FCFC00210E09 /* RemoteImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageDataLoader.swift; sourceTree = "<group>"; };
 		43D0852C2880331600F93724 /* EventsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EventsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43D0852F2880331600F93724 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		43D085312880331600F93724 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 				437EADF42886E10000210E09 /* VividSeatsAPIEventsLoader.swift */,
 				437EADF62886E13B00210E09 /* EventsMapper.swift */,
 				437EADF82886E14C00210E09 /* VividSeatsAPIEvent.swift */,
+				437EAE072886FCFC00210E09 /* RemoteImageDataLoader.swift */,
 			);
 			path = "Events API";
 			sourceTree = "<group>";
@@ -281,6 +284,7 @@
 				437EADF32886E0C200210E09 /* HTTPClient.swift in Sources */,
 				43D085652880495900F93724 /* EventsLoader.swift in Sources */,
 				43D085632880481800F93724 /* Event.swift in Sources */,
+				437EAE082886FCFC00210E09 /* RemoteImageDataLoader.swift in Sources */,
 				437EADF52886E10000210E09 /* VividSeatsAPIEventsLoader.swift in Sources */,
 				437EAE022886E6DF00210E09 /* ImageDataLoader.swift in Sources */,
 				437EADF72886E13B00210E09 /* EventsMapper.swift in Sources */,
