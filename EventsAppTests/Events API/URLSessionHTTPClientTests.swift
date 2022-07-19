@@ -40,18 +40,21 @@ class URLSessionHTTPClientTests: XCTestCase {
             exp.fulfill()
         }
         
-        let configuration = URLSessionConfiguration.ephemeral
-        configuration.protocolClasses = [URLProtocolStub.self]
-        let session = URLSession(configuration: configuration)
-        let sut = URLSessionHTTPClient(session: session)
-        trackForMemoryLeaks(sut)
-        
-        sut.get(from: url) { _ in }
+        makeSUT().get(from: url) { _ in }
         
         wait(for: [exp], timeout: 1.0)
     }
     
     // MARK: - Helpers
+    
+    private func makeSUT() -> URLSessionHTTPClient {
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [URLProtocolStub.self]
+        let session = URLSession(configuration: configuration)
+        let sut = URLSessionHTTPClient(session: session)
+        trackForMemoryLeaks(sut)
+        return sut
+    }
 }
 
 class URLProtocolStub: URLProtocol {
