@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		4371C33E28859728005A1275 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4371C33D28859728005A1275 /* XCTestCase+MemoryLeakTracking.swift */; };
+		437EADF32886E0C200210E09 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EADF22886E0C200210E09 /* HTTPClient.swift */; };
+		437EADF52886E10000210E09 /* VividSeatsAPIEventsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EADF42886E10000210E09 /* VividSeatsAPIEventsLoader.swift */; };
+		437EADF72886E13B00210E09 /* EventsMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EADF62886E13B00210E09 /* EventsMapper.swift */; };
+		437EADF92886E14C00210E09 /* VividSeatsAPIEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EADF82886E14C00210E09 /* VividSeatsAPIEvent.swift */; };
+		437EADFC2886E1AE00210E09 /* HTTPURLResponse+StatusCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EADFB2886E1AE00210E09 /* HTTPURLResponse+StatusCode.swift */; };
 		43D085302880331600F93724 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0852F2880331600F93724 /* AppDelegate.swift */; };
 		43D085322880331600F93724 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D085312880331600F93724 /* SceneDelegate.swift */; };
 		43D085392880331600F93724 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43D085382880331600F93724 /* Assets.xcassets */; };
@@ -29,6 +34,11 @@
 
 /* Begin PBXFileReference section */
 		4371C33D28859728005A1275 /* XCTestCase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
+		437EADF22886E0C200210E09 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
+		437EADF42886E10000210E09 /* VividSeatsAPIEventsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VividSeatsAPIEventsLoader.swift; sourceTree = "<group>"; };
+		437EADF62886E13B00210E09 /* EventsMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsMapper.swift; sourceTree = "<group>"; };
+		437EADF82886E14C00210E09 /* VividSeatsAPIEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VividSeatsAPIEvent.swift; sourceTree = "<group>"; };
+		437EADFB2886E1AE00210E09 /* HTTPURLResponse+StatusCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HTTPURLResponse+StatusCode.swift"; sourceTree = "<group>"; };
 		43D0852C2880331600F93724 /* EventsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EventsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43D0852F2880331600F93724 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		43D085312880331600F93724 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -67,6 +77,26 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		437EADF12886E0B900210E09 /* Events API */ = {
+			isa = PBXGroup;
+			children = (
+				437EADFA2886E1A000210E09 /* Helpers */,
+				437EADF22886E0C200210E09 /* HTTPClient.swift */,
+				437EADF42886E10000210E09 /* VividSeatsAPIEventsLoader.swift */,
+				437EADF62886E13B00210E09 /* EventsMapper.swift */,
+				437EADF82886E14C00210E09 /* VividSeatsAPIEvent.swift */,
+			);
+			path = "Events API";
+			sourceTree = "<group>";
+		};
+		437EADFA2886E1A000210E09 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				437EADFB2886E1AE00210E09 /* HTTPURLResponse+StatusCode.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		43D085232880331600F93724 = {
 			isa = PBXGroup;
 			children = (
@@ -88,6 +118,7 @@
 		43D0852E2880331600F93724 /* EventsApp */ = {
 			isa = PBXGroup;
 			children = (
+				437EADF12886E0B900210E09 /* Events API */,
 				43D08561288047BF00F93724 /* Events Feature */,
 				43D0852F2880331600F93724 /* AppDelegate.swift */,
 				43D085312880331600F93724 /* SceneDelegate.swift */,
@@ -218,8 +249,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				43D085302880331600F93724 /* AppDelegate.swift in Sources */,
+				437EADF92886E14C00210E09 /* VividSeatsAPIEvent.swift in Sources */,
+				437EADF32886E0C200210E09 /* HTTPClient.swift in Sources */,
 				43D085652880495900F93724 /* EventsLoader.swift in Sources */,
 				43D085632880481800F93724 /* Event.swift in Sources */,
+				437EADF52886E10000210E09 /* VividSeatsAPIEventsLoader.swift in Sources */,
+				437EADF72886E13B00210E09 /* EventsMapper.swift in Sources */,
+				437EADFC2886E1AE00210E09 /* HTTPURLResponse+StatusCode.swift in Sources */,
 				43D085322880331600F93724 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
