@@ -31,7 +31,6 @@ struct VividSeatsAPIEvent: Decodable {
 class VividSeatsAPIEventsLoader {
     private let url: URL
     private let httpClient: HTTPClient
-    private static let jsonDecoder = JSONDecoder()
     
     typealias Result = EventsLoader.Result
     
@@ -60,13 +59,31 @@ class VividSeatsAPIEventsLoader {
     }
     
     private static func map(_ data: Data, from response: HTTPURLResponse) -> Result {
-        if response.statusCode == 200,
-           let root = try? jsonDecoder.decode([VividSeatsAPIEvent].self, from: data) {
-            return .success(root.toModels())
-        } else {
-            return .failure(Error.invalidData)
+        do {
+            let events = try EventsMapper.map(data, from: response)
+            return .success(events.toModels())
+        } catch {
+            return .failure(error)
         }
     }
+}
+
+class EventsMapper {
+    private static let jsonDecoder = JSONDecoder()
+    
+    static func map(_ data: Data, from response: HTTPURLResponse) throws -> [VividSeatsAPIEvent] {
+        guard response.isSuccessful, let root = try? jsonDecoder.decode([VividSeatsAPIEvent].self, from: data) else {
+            throw VividSeatsAPIEventsLoader.Error.invalidData
+        }
+        
+        return root
+    }
+}
+
+extension HTTPURLResponse {
+    private static var SUCCESS_200: Int { 200 }
+    
+    var isSuccessful: Bool { statusCode == HTTPURLResponse.SUCCESS_200 }
 }
 
 private extension Array where Element == VividSeatsAPIEvent {
