@@ -38,7 +38,7 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
         let (sut, httpClient) = makeSUT()
         
         expect(sut, toCompleteWith: failure(.connectivity), when: {
-            let clientError = NSError(domain: "Test", code: 0)
+            let clientError = anyNSError()
             httpClient.complete(with: clientError)
         })
     }
@@ -86,7 +86,7 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
             location: "another location",
             dateInterval: "another date interval",
             count: 2,
-            imageURL: URL(string: "http://any-url.com")!)
+            imageURL: anyURL())
         let events = [event1.event, event2.event]
         
         expect(sut, toCompleteWith: .success(events), when: {
@@ -96,7 +96,7 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
     }
     
     func test_load_doesNotDeliverEventsAfterSUTHasBeenDeallocated() {
-        let url = URL(string: "http://any-url.com")!
+        let url = anyURL()
         let httpClient = HTTPClientSpy()
         var sut: VividSeatsAPIEventsLoader? = VividSeatsAPIEventsLoader(url: url, httpClient: httpClient)
         
