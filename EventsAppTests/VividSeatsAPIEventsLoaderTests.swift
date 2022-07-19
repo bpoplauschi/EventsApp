@@ -62,16 +62,21 @@ class VividSeatsAPIEventsLoader {
     private static func map(_ data: Data, from response: HTTPURLResponse) -> Result {
         if response.statusCode == 200,
            let root = try? jsonDecoder.decode([VividSeatsAPIEvent].self, from: data) {
-            return .success(root.map({ apiEvent in
-                Event(
-                    name: apiEvent.topLabel,
-                    location: apiEvent.middleLabel,
-                    dateInterval: apiEvent.bottomLabel,
-                    count: apiEvent.eventCount,
-                    imageURL: URL(string: apiEvent.image))
-            }))
+            return .success(root.toModels())
         } else {
             return .failure(Error.invalidData)
+        }
+    }
+}
+
+private extension Array where Element == VividSeatsAPIEvent {
+    func toModels() -> [Event] {
+        map { Event(
+            name: $0.topLabel,
+            location: $0.middleLabel,
+            dateInterval: $0.bottomLabel,
+            count: $0.eventCount,
+            imageURL: URL(string: $0.image))
         }
     }
 }
