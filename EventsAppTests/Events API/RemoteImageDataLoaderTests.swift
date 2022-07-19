@@ -26,7 +26,11 @@ class RemoteImageDataLoader {
         httpClient.get(from: url) { result in
             switch result {
             case let .success((data, response)):
-                completion(.failure(Error.invalidData))
+                if response.statusCode == 200 && !data.isEmpty {
+                    completion(.success(data))
+                } else {
+                    completion(.failure(Error.invalidData))
+                }
                 
             case .failure:
                 completion(.failure(Error.connectivity))
@@ -89,9 +93,19 @@ class RemoteImageDataLoaderTests: XCTestCase {
     
     func test_loadImageDataFromURL_deliversInvalidDataErrorOn200HTTPResponseWithEmptyData() {
         let (sut, httpClient) = makeSUT()
+        let emptyData = Data()
         
         expect(sut, toCompleteWith: failure(.invalidData), when: {
-            httpClient.complete(withStatusCode: 200, data: Data())
+            httpClient.complete(withStatusCode: 200, data: emptyData)
+        })
+    }
+    
+    func test_loadImageDataFromURL_deliversReceivedNonEmptyDataOn200HTTPResponse() {
+        let (sut, httpClient) = makeSUT()
+        let nonEmptyData = Data("non-empty data".utf8)
+        
+        expect(sut, toCompleteWith: .success(nonEmptyData), when: {
+            httpClient.complete(withStatusCode: 200, data: nonEmptyData)
         })
     }
     
@@ -125,11 +139,14 @@ class RemoteImageDataLoaderTests: XCTestCase {
         
         _ = sut.loadImageData(from: url) { receivedResult in
             switch (receivedResult, expectedResult) {
+            case let (.success(receivedData), .success(expectedData)):
+                XCTAssertEqual(receivedData, expectedData, file: file, line: line)
+                
             case let (.failure(receivedError as RemoteImageDataLoader.Error), .failure(expectedError as RemoteImageDataLoader.Error)):
                 XCTAssertEqual(receivedError, expectedError, file: file, line: line)
                 
             default:
-                XCTFail()
+                XCTFail("Expected result \(expectedResult) got \(receivedResult) instead", file: file, line: line)
             }
             
             exp.fulfill()
