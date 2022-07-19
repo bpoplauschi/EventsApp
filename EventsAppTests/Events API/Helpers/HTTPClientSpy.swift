@@ -13,6 +13,10 @@ final class HTTPClientSpy: HTTPClient {
     
     var requestedURLs: [URL] { messages.map { $0.url } }
     
+    func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) {
+        messages.append((url, completion))
+    }
+    
     func post(to url: URL, completion: @escaping (HTTPClient.Result) -> Void) {
         messages.append((url, completion))
     }

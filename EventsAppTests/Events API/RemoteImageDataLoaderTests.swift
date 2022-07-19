@@ -16,13 +16,32 @@ class RemoteImageDataLoader {
         self.url = url
         self.httpClient = httpClient
     }
+    
+    func loadImageData(from url: URL, completion: @escaping (ImageDataLoader.Result) -> Void) -> ImageDataLoaderTask {
+        httpClient.get(from: url) { _ in }
+        
+        return ImageDataLoaderTaskSpy()
+    }
+}
+
+private class ImageDataLoaderTaskSpy: ImageDataLoaderTask {
+    func cancel() {}
 }
 
 class RemoteImageDataLoaderTests: XCTestCase {
     func test_init_doesNotPerformAnyURLRequest() {
-        let (_, client) = makeSUT()
+        let (_, httpClient) = makeSUT()
         
-        XCTAssertTrue(client.requestedURLs.isEmpty)
+        XCTAssertTrue(httpClient.requestedURLs.isEmpty)
+    }
+    
+    func test_loadImageDataFromURL_requestsDataFromURL() {
+        let url = URL(string: "https://a-concrete-url.com")!
+        let (sut, httpClient) = makeSUT(url: url)
+        
+        _ = sut.loadImageData(from: url) { _ in }
+        
+        XCTAssertEqual(httpClient.requestedURLs, [url])
     }
     
     // MARK: - Helpers
