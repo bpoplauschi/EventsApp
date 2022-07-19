@@ -31,6 +31,7 @@ struct VividSeatsAPIEvent: Decodable {
 class VividSeatsAPIEventsLoader {
     private let url: URL
     private let httpClient: HTTPClient
+    private static let jsonDecoder = JSONDecoder()
     
     typealias Result = EventsLoader.Result
     
@@ -50,23 +51,27 @@ class VividSeatsAPIEventsLoader {
             
             switch result {
             case let .success((data, response)):
-                if response.statusCode == 200,
-                    let root = try? JSONDecoder().decode([VividSeatsAPIEvent].self, from: data) {
-                    completion(.success(root.map({ apiEvent in
-                        Event(
-                            name: apiEvent.topLabel,
-                            location: apiEvent.middleLabel,
-                            dateInterval: apiEvent.bottomLabel,
-                            count: apiEvent.eventCount,
-                            imageURL: URL(string: apiEvent.image))
-                    })))
-                } else {
-                    completion(.failure(Error.invalidData))
-                }
+                completion(VividSeatsAPIEventsLoader.map(data, from: response))
                 
             case .failure:
                 completion(.failure(Error.connectivity))
             }
+        }
+    }
+    
+    private static func map(_ data: Data, from response: HTTPURLResponse) -> Result {
+        if response.statusCode == 200,
+           let root = try? jsonDecoder.decode([VividSeatsAPIEvent].self, from: data) {
+            return .success(root.map({ apiEvent in
+                Event(
+                    name: apiEvent.topLabel,
+                    location: apiEvent.middleLabel,
+                    dateInterval: apiEvent.bottomLabel,
+                    count: apiEvent.eventCount,
+                    imageURL: URL(string: apiEvent.image))
+            }))
+        } else {
+            return .failure(Error.invalidData)
         }
     }
 }
