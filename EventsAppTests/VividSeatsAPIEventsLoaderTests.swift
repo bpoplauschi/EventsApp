@@ -45,7 +45,9 @@ class VividSeatsAPIEventsLoader {
     }
     
     func load(completion: @escaping (Result) -> Void) {
-        httpClient.post(to: url) { result in
+        httpClient.post(to: url) { [weak self] result in
+            guard self != nil else { return }
+            
             switch result {
             case let .success((data, response)):
                 if response.statusCode == 200,
@@ -154,6 +156,20 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
             let jsonData = makeEventsJSONData([event1.json, event2.json])
             httpClient.complete(withStatusCode: 200, data: jsonData)
         })
+    }
+    
+    func test_load_doesNotDeliverEventsAfterSUTHasBeenDeallocated() {
+        let url = URL(string: "http://any-url.com")!
+        let httpClient = HTTPClientSpy()
+        var sut: VividSeatsAPIEventsLoader? = VividSeatsAPIEventsLoader(url: url, httpClient: httpClient)
+        
+        var capturedResults: [VividSeatsAPIEventsLoader.Result] = []
+        sut?.load { capturedResults.append($0) }
+        
+        sut = nil
+        httpClient.complete(withStatusCode: 200, data: makeEventsJSONData([]))
+        
+        XCTAssertTrue(capturedResults.isEmpty)
     }
     
     // MARK: - Helpers
