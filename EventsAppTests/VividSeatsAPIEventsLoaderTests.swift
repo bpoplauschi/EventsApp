@@ -51,7 +51,12 @@ class VividSeatsAPIEventsLoader {
                 if response.statusCode == 200,
                     let root = try? JSONDecoder().decode([VividSeatsAPIEvent].self, from: data) {
                     completion(.success(root.map({ apiEvent in
-                        Event(name: apiEvent.topLabel, location: apiEvent.middleLabel, dateInterval: apiEvent.bottomLabel, count: apiEvent.eventCount, imageURL: URL(string: apiEvent.image))
+                        Event(
+                            name: apiEvent.topLabel,
+                            location: apiEvent.middleLabel,
+                            dateInterval: apiEvent.bottomLabel,
+                            count: apiEvent.eventCount,
+                            imageURL: URL(string: apiEvent.image))
                     })))
                 } else {
                     completion(.failure(Error.invalidData))
@@ -131,8 +136,18 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
     
     func test_load_deliversEventsOn200HTTPResponseWithEventsJSON() {
         let (sut, httpClient) = makeSUT()
-        let event1 = makeEvent(name: "a name", location: "a location", dateInterval: "a date interval", count: 1, imageURL: nil)
-        let event2 = makeEvent(name: "another name", location: "another location", dateInterval: "another date interval", count: 2, imageURL: URL(string: "http://any-url.com")!)
+        let event1 = makeEvent(
+            name: "a name",
+            location: "a location",
+            dateInterval: "a date interval",
+            count: 1,
+            imageURL: nil)
+        let event2 = makeEvent(
+            name: "another name",
+            location: "another location",
+            dateInterval: "another date interval",
+            count: 2,
+            imageURL: URL(string: "http://any-url.com")!)
         let events = [event1.event, event2.event]
         
         expect(sut, toCompleteWith: .success(events), when: {
@@ -143,7 +158,11 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func makeSUT(url: URL = URL(string: "http://a-url.com")!, file: StaticString = #filePath, line: UInt = #line) -> (sut: VividSeatsAPIEventsLoader, httpClient: HTTPClientSpy) {
+    private func makeSUT(
+        url: URL = URL(string: "http://a-url.com")!,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) -> (sut: VividSeatsAPIEventsLoader, httpClient: HTTPClientSpy) {
         let httpClient = HTTPClientSpy()
         let sut = VividSeatsAPIEventsLoader(url: url, httpClient: httpClient)
         trackForMemoryLeaks(httpClient)
@@ -157,7 +176,13 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
     
     private typealias JSON = [String: Any]
     
-    private func makeEvent(name: String, location: String, dateInterval: String, count: Int, imageURL: URL?) -> (event: Event, json: JSON) {
+    private func makeEvent(
+        name: String,
+        location: String,
+        dateInterval: String,
+        count: Int,
+        imageURL: URL?
+    ) -> (event: Event, json: JSON) {
         let event = Event(name: name, location: location, dateInterval: dateInterval, count: count, imageURL: imageURL)
         
         let json = [
@@ -183,7 +208,13 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
         return try! JSONSerialization.data(withJSONObject: json)
     }
     
-    private func expect(_ sut: VividSeatsAPIEventsLoader, toCompleteWith expectedResult: VividSeatsAPIEventsLoader.Result, when action: () -> Void, file: StaticString = #file, line: UInt = #line) {
+    private func expect(
+        _ sut: VividSeatsAPIEventsLoader,
+        toCompleteWith expectedResult: VividSeatsAPIEventsLoader.Result,
+        when action: () -> Void,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) {
         let exp = expectation(description: "Wait for load completion")
         
         sut.load { receivedResult in
