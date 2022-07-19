@@ -9,7 +9,6 @@ import EventsApp
 import XCTest
 
 class RemoteImageDataLoader {
-    private let url: URL
     private let httpClient: HTTPClient
     
     enum Error: Swift.Error {
@@ -17,8 +16,7 @@ class RemoteImageDataLoader {
         case invalidData
     }
     
-    init(url: URL, httpClient: HTTPClient) {
-        self.url = url
+    init(httpClient: HTTPClient) {
         self.httpClient = httpClient
     }
     
@@ -54,7 +52,7 @@ class RemoteImageDataLoaderTests: XCTestCase {
     
     func test_loadImageDataFromURL_requestsDataFromURL() {
         let url = URL(string: "https://a-concrete-url.com")!
-        let (sut, httpClient) = makeSUT(url: url)
+        let (sut, httpClient) = makeSUT()
         
         _ = sut.loadImageData(from: url) { _ in }
         
@@ -63,7 +61,7 @@ class RemoteImageDataLoaderTests: XCTestCase {
     
     func test_loadImageDataFromURLTwice_requestsDataFromURLTwice() {
         let url = URL(string: "https://a-concrete-url.com")!
-        let (sut, httpClient) = makeSUT(url: url)
+        let (sut, httpClient) = makeSUT()
         
         _ = sut.loadImageData(from: url) { _ in }
         _ = sut.loadImageData(from: url) { _ in }
@@ -112,12 +110,11 @@ class RemoteImageDataLoaderTests: XCTestCase {
     // MARK: - Helpers
     
     private func makeSUT(
-        url: URL = anyURL(),
         file: StaticString = #file,
         line: UInt = #line
     ) -> (sut: RemoteImageDataLoader, httpClient: HTTPClientSpy) {
         let httpClient = HTTPClientSpy()
-        let sut = RemoteImageDataLoader(url: url, httpClient: httpClient)
+        let sut = RemoteImageDataLoader(httpClient: httpClient)
         trackForMemoryLeaks(httpClient)
         trackForMemoryLeaks(sut)
         return (sut, httpClient)
