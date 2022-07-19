@@ -15,6 +15,7 @@
 		437EADFC2886E1AE00210E09 /* HTTPURLResponse+StatusCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EADFB2886E1AE00210E09 /* HTTPURLResponse+StatusCode.swift */; };
 		437EAE002886E23A00210E09 /* HTTPClientSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EADFF2886E23A00210E09 /* HTTPClientSpy.swift */; };
 		437EAE022886E6DF00210E09 /* ImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EAE012886E6DF00210E09 /* ImageDataLoader.swift */; };
+		437EAE042886E78900210E09 /* RemoteImageDataLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EAE032886E78900210E09 /* RemoteImageDataLoaderTests.swift */; };
 		437EAE062886E83C00210E09 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EAE052886E83C00210E09 /* TestHelpers.swift */; };
 		43D085302880331600F93724 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0852F2880331600F93724 /* AppDelegate.swift */; };
 		43D085322880331600F93724 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D085312880331600F93724 /* SceneDelegate.swift */; };
@@ -44,6 +45,7 @@
 		437EADFB2886E1AE00210E09 /* HTTPURLResponse+StatusCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HTTPURLResponse+StatusCode.swift"; sourceTree = "<group>"; };
 		437EADFF2886E23A00210E09 /* HTTPClientSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClientSpy.swift; sourceTree = "<group>"; };
 		437EAE012886E6DF00210E09 /* ImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDataLoader.swift; sourceTree = "<group>"; };
+		437EAE032886E78900210E09 /* RemoteImageDataLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageDataLoaderTests.swift; sourceTree = "<group>"; };
 		437EAE052886E83C00210E09 /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 		43D0852C2880331600F93724 /* EventsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EventsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43D0852F2880331600F93724 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 			children = (
 				437EADFE2886E23300210E09 /* Helpers */,
 				43D0856628804D7D00F93724 /* VividSeatsAPIEventsLoaderTests.swift */,
+				437EAE032886E78900210E09 /* RemoteImageDataLoaderTests.swift */,
 			);
 			path = "Events API";
 			sourceTree = "<group>";
@@ -290,6 +293,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				437EAE042886E78900210E09 /* RemoteImageDataLoaderTests.swift in Sources */,
 				437EAE062886E83C00210E09 /* TestHelpers.swift in Sources */,
 				43D0856728804D7D00F93724 /* VividSeatsAPIEventsLoaderTests.swift in Sources */,
 				437EAE002886E23A00210E09 /* HTTPClientSpy.swift in Sources */,
