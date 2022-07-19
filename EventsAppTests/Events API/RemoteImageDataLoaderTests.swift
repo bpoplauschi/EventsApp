@@ -62,25 +62,11 @@ class RemoteImageDataLoaderTests: XCTestCase {
     
     func test_loadImageDataFromURL_deliversConnectivityErrorOnClientError() {
         let (sut, httpClient) = makeSUT()
-        let url = URL(string: "https://a-concrete-url.com")!
         let clientError = anyNSError()
-        let exp = expectation(description: "Wait for load completion")
         
-        _ = sut.loadImageData(from: url) { receivedResult in
-            switch receivedResult {
-            case let .failure(receivedError as RemoteImageDataLoader.Error):
-                XCTAssertEqual(receivedError, .connectivity)
-                
-            default:
-                XCTFail()
-            }
-            
-            exp.fulfill()
-        }
-        
-        httpClient.complete(with: clientError)
-        
-        wait(for: [exp], timeout: 1.0)
+        expect(sut, toCompleteWith: failure(.connectivity), when: {
+            httpClient.complete(with: clientError)
+        })
     }
     
     // MARK: - Helpers
@@ -95,5 +81,36 @@ class RemoteImageDataLoaderTests: XCTestCase {
         trackForMemoryLeaks(httpClient)
         trackForMemoryLeaks(sut)
         return (sut, httpClient)
+    }
+    
+    private func failure(_ error: RemoteImageDataLoader.Error) -> ImageDataLoader.Result {
+        .failure(error)
+    }
+    
+    private func expect(
+        _ sut: RemoteImageDataLoader,
+        toCompleteWith expectedResult: ImageDataLoader.Result,
+        when action: () -> Void,
+        file: StaticString = #file,
+        line: UInt = #line
+    ) {
+        let url = URL(string: "https://a-concrete-url.com")!
+        let exp = expectation(description: "Wait for load completion")
+        
+        _ = sut.loadImageData(from: url) { receivedResult in
+            switch (receivedResult, expectedResult) {
+            case let (.failure(receivedError as RemoteImageDataLoader.Error), .failure(expectedError as RemoteImageDataLoader.Error)):
+                XCTAssertEqual(receivedError, expectedError, file: file, line: line)
+                
+            default:
+                XCTFail()
+            }
+            
+            exp.fulfill()
+        }
+        
+        action()
+        
+        wait(for: [exp], timeout: 1.0)
     }
 }
