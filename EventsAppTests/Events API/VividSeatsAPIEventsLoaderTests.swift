@@ -156,7 +156,6 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
     }
     
     private func makeEventsJSONData(_ events: [JSON]) -> Data {
-        print(events)
         let json = events
         return try! JSONSerialization.data(withJSONObject: json)
     }

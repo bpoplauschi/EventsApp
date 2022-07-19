@@ -18,6 +18,7 @@
 		437EAE042886E78900210E09 /* RemoteImageDataLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EAE032886E78900210E09 /* RemoteImageDataLoaderTests.swift */; };
 		437EAE062886E83C00210E09 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EAE052886E83C00210E09 /* TestHelpers.swift */; };
 		437EAE082886FCFC00210E09 /* RemoteImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EAE072886FCFC00210E09 /* RemoteImageDataLoader.swift */; };
+		437EAE0A2886FD9200210E09 /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EAE092886FD9200210E09 /* URLSessionHTTPClientTests.swift */; };
 		43D085302880331600F93724 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0852F2880331600F93724 /* AppDelegate.swift */; };
 		43D085322880331600F93724 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D085312880331600F93724 /* SceneDelegate.swift */; };
 		43D085392880331600F93724 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43D085382880331600F93724 /* Assets.xcassets */; };
@@ -49,6 +50,7 @@
 		437EAE032886E78900210E09 /* RemoteImageDataLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageDataLoaderTests.swift; sourceTree = "<group>"; };
 		437EAE052886E83C00210E09 /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 		437EAE072886FCFC00210E09 /* RemoteImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageDataLoader.swift; sourceTree = "<group>"; };
+		437EAE092886FD9200210E09 /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
 		43D0852C2880331600F93724 /* EventsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EventsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43D0852F2880331600F93724 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		43D085312880331600F93724 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 				437EADFE2886E23300210E09 /* Helpers */,
 				43D0856628804D7D00F93724 /* VividSeatsAPIEventsLoaderTests.swift */,
 				437EAE032886E78900210E09 /* RemoteImageDataLoaderTests.swift */,
+				437EAE092886FD9200210E09 /* URLSessionHTTPClientTests.swift */,
 			);
 			path = "Events API";
 			sourceTree = "<group>";
@@ -298,6 +301,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				437EAE042886E78900210E09 /* RemoteImageDataLoaderTests.swift in Sources */,
+				437EAE0A2886FD9200210E09 /* URLSessionHTTPClientTests.swift in Sources */,
 				437EAE062886E83C00210E09 /* TestHelpers.swift in Sources */,
 				43D0856728804D7D00F93724 /* VividSeatsAPIEventsLoaderTests.swift in Sources */,
 				437EAE002886E23A00210E09 /* HTTPClientSpy.swift in Sources */,
