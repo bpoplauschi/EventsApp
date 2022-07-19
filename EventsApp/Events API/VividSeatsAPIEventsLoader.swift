@@ -7,7 +7,7 @@
 
 import Foundation
 
-public final class VividSeatsAPIEventsLoader {
+public final class VividSeatsAPIEventsLoader: EventsLoader {
     private let url: URL
     private let httpClient: HTTPClient
     
