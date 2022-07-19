@@ -20,29 +20,45 @@ class RemoteImageDataLoader {
         self.httpClient = httpClient
     }
     
+    private final class HTTPClientTaskWrapper: ImageDataLoaderTask {
+        private var completion: ((ImageDataLoader.Result) -> Void)?
+        
+        var wrapped: HTTPClientTask?
+        
+        init(_ completion: @escaping (ImageDataLoader.Result) -> Void) {
+            self.completion = completion
+        }
+        
+        func complete(with result: ImageDataLoader.Result) {
+            completion?(result)
+        }
+        
+        func cancel() {
+            completion = nil
+            wrapped?.cancel()
+        }
+    }
+    
     func loadImageData(from url: URL, completion: @escaping (ImageDataLoader.Result) -> Void) -> ImageDataLoaderTask {
-        httpClient.get(from: url) { [weak self] result in
+        let task = HTTPClientTaskWrapper(completion)
+        task.wrapped = httpClient.get(from: url) { [weak self] result in
             guard self != nil else { return }
             
             switch result {
             case let .success((data, response)):
                 if response.statusCode == 200 && !data.isEmpty {
-                    completion(.success(data))
+                    task.complete(with: .success(data))
                 } else {
-                    completion(.failure(Error.invalidData))
+                    task.complete(with: .failure(Error.invalidData))
                 }
                 
             case .failure:
-                completion(.failure(Error.connectivity))
+                task.complete(with: .failure(Error.connectivity))
             }
         }
         
-        return ImageDataLoaderTaskSpy()
+        return task
     }
-}
-
-private class ImageDataLoaderTaskSpy: ImageDataLoaderTask {
-    func cancel() {}
 }
 
 class RemoteImageDataLoaderTests: XCTestCase {
@@ -107,6 +123,18 @@ class RemoteImageDataLoaderTests: XCTestCase {
         expect(sut, toCompleteWith: .success(nonEmptyData), when: {
             httpClient.complete(withStatusCode: 200, data: nonEmptyData)
         })
+    }
+    
+    func test_cancelLoadImageDataURLTask_cancelsClientURLRequest() {
+        let (sut, httpClient) = makeSUT()
+        let url = URL(string: "https://a-concrete-url.com")!
+        
+        let task = sut.loadImageData(from: url) { _ in }
+        XCTAssertTrue(httpClient.cancelledURLs.isEmpty)
+        
+        task.cancel()
+        
+        XCTAssertEqual(httpClient.cancelledURLs, [url])
     }
     
     func test_loadImageDataFromURL_doesNotDeliverResultAfterSUTHasBeenDeallocated() {
