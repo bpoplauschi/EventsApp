@@ -15,17 +15,26 @@ class URLSessionHTTPClient {
     
     private struct UnexpectedValuesRepresentation: Error {}
     
+    private struct URLSessionTaskWrapper: HTTPClientTask {
+        let wrapped: URLSessionTask
+        
+        func cancel() {
+            wrapped.cancel()
+        }
+    }
+    
     init(session: URLSession) {
         self.session = session
     }
     
-    func get(from url: URL, completion: @escaping (Result) -> Void) {
+    @discardableResult
+    func get(from url: URL, completion: @escaping (Result) -> Void) -> HTTPClientTask {
         let task = session.dataTask(with: url) { data, response, error in
             switch (data, response, error) {
             case let (_, _, .some(error)):
                 completion(.failure(error))
                 
-            case let (.some(data), .some(response as HTTPURLResponse), _):
+            case let (.some(data), .some(response as HTTPURLResponse), .none):
                 completion(.success((data, response)))
                 
             default:
@@ -33,6 +42,7 @@ class URLSessionHTTPClient {
             }
         }
         task.resume()
+        return URLSessionTaskWrapper(wrapped: task)
     }
 }
 
@@ -56,6 +66,12 @@ class URLSessionHTTPClientTests: XCTestCase {
         makeSUT().get(from: url) { _ in }
         
         wait(for: [exp], timeout: 1.0)
+    }
+    
+    func test_cancelGetFromURLTask_cancelsURLRequest() throws {
+        let receivedError = try XCTUnwrap(resultErrorFor(taskHandler: { $0.cancel() }) as? NSError)
+
+        XCTAssertEqual(receivedError.code, URLError.cancelled.rawValue)
     }
     
     func test_getFromURL_failsOnRequestError() throws {
@@ -103,7 +119,11 @@ class URLSessionHTTPClientTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func resultValuesFor(_ values: (data: Data?, response: URLResponse?, error: Error?), file: StaticString = #file, line: UInt = #line) -> (data: Data, response: HTTPURLResponse)? {
+    private func resultValuesFor(
+        _ values: (data: Data?, response: URLResponse?, error: Error?),
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> (data: Data, response: HTTPURLResponse)? {
         let result = resultFor(values, file: file, line: line)
         
         switch result {
@@ -115,8 +135,13 @@ class URLSessionHTTPClientTests: XCTestCase {
         }
     }
     
-    private func resultErrorFor(_ values: (data: Data?, response: URLResponse?, error: Error?), file: StaticString = #file, line: UInt = #line) -> Error? {
-        let result = resultFor(values, file: file, line: line)
+    private func resultErrorFor(
+        _ values: (data: Data?, response: URLResponse?, error: Error?)? = nil,
+        taskHandler: (HTTPClientTask) -> Void = { _ in },
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> Error? {
+        let result = resultFor(values, taskHandler: taskHandler, file: file, line: line)
         
         switch result {
         case let .failure(error):
@@ -127,17 +152,24 @@ class URLSessionHTTPClientTests: XCTestCase {
         }
     }
     
-    private func resultFor(_ values: (data: Data?, response: URLResponse?, error: Error?), file: StaticString = #file, line: UInt = #line) -> HTTPClient.Result {
-        URLProtocolStub.stub(data: values.data, response: values.response, error: values.error)
+    private func resultFor(
+        _ values: (data: Data?, response: URLResponse?, error: Error?)?,
+        taskHandler: (HTTPClientTask) -> Void = { _ in },
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> HTTPClient.Result {
+        values.map { URLProtocolStub.stub(data: $0, response: $1, error: $2) }
         
         let sut = makeSUT(file: file, line: line)
         let exp = expectation(description: "Wait for request")
         
         var receivedResult: HTTPClient.Result!
-        sut.get(from: anyURL()) { result in
+        
+        let task = sut.get(from: anyURL()) { result in
             receivedResult = result
             exp.fulfill()
         }
+        taskHandler(task)
         
         wait(for: [exp], timeout: 1.0)
         return receivedResult
