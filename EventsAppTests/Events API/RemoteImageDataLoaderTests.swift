@@ -120,8 +120,8 @@ class RemoteImageDataLoaderTests: XCTestCase {
     ) -> (sut: RemoteImageDataLoader, httpClient: HTTPClientSpy) {
         let httpClient = HTTPClientSpy()
         let sut = RemoteImageDataLoader(httpClient: httpClient)
-        trackForMemoryLeaks(httpClient)
-        trackForMemoryLeaks(sut)
+        trackForMemoryLeaks(httpClient, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, httpClient)
     }
     

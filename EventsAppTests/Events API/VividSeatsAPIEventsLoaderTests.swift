@@ -118,8 +118,8 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
     ) -> (sut: VividSeatsAPIEventsLoader, httpClient: HTTPClientSpy) {
         let httpClient = HTTPClientSpy()
         let sut = VividSeatsAPIEventsLoader(url: url, httpClient: httpClient)
-        trackForMemoryLeaks(httpClient)
-        trackForMemoryLeaks(sut)
+        trackForMemoryLeaks(httpClient, file: file, line: line)
+        trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, httpClient)
     }
     
