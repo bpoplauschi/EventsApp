@@ -231,6 +231,15 @@ class URLSessionHTTPClientPOSTTests: XCTestCase {
         XCTAssertEqual(receivedError.code, URLError.cancelled.rawValue)
     }
     
+    func test_postToURL_failsOnRequestError() throws {
+        let requestError = anyNSError()
+        
+        let receivedError = try XCTUnwrap(resultErrorForPostToUrl(with: (data: nil, response: nil, error: requestError)))
+        
+        XCTAssertEqual((receivedError as NSError).domain, requestError.domain)
+        XCTAssertEqual((receivedError as NSError).code, requestError.code)
+    }
+    
     // MARK: - Helpers
     
     private func resultValuesForPostToUrl(
