@@ -37,6 +37,18 @@ class URLSessionHTTPClient {
         return URLSessionTaskWrapper(wrapped: task)
     }
     
+    @discardableResult
+    func post(to url: URL, body: Data, completion: @escaping (Result) -> Void) -> HTTPClientTask {
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = body
+        let task = session.dataTask(with: request) { _, _, _ in
+            completion(.failure(UnexpectedValuesRepresentation()))
+        }
+        task.resume()
+        return URLSessionTaskWrapper(wrapped: task)
+    }
+    
     private func createResult(fromData data: Data?, response: URLResponse?, error: Error?) -> HTTPClient.Result {
         Result {
             switch (data, response, error) {
@@ -71,6 +83,23 @@ class URLSessionHTTPClientTests: XCTestCase {
         }
         
         makeSUT().get(from: url) { _ in }
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    func test_postToURL_performsPOSTRequestWithURL() {
+        let url = anyURL()
+        let exp = expectation(description: "Wait for request")
+        let bodyData = anyData()
+        
+        URLProtocolStub.observerRequests { request in
+            XCTAssertEqual(request.url, url)
+            XCTAssertEqual(request.httpMethod, "POST")
+            XCTAssertEqual(request.httpBodyData, bodyData)
+            exp.fulfill()
+        }
+        
+        makeSUT().post(to: url, body: bodyData) { _ in }
         
         wait(for: [exp], timeout: 1.0)
     }
@@ -251,4 +280,28 @@ class URLProtocolStub: URLProtocol {
     }
     
     override func stopLoading() {}
+}
+
+extension URLRequest {
+    var httpBodyData: Data? {
+        guard let stream = httpBodyStream else { return httpBody }
+        
+        let bufferSize = 1024
+        var data = Data()
+        var buffer = [UInt8](repeating: 0, count: bufferSize)
+        
+        stream.open()
+        
+        while stream.hasBytesAvailable {
+            let length = stream.read(&buffer, maxLength: bufferSize)
+            
+            if length == 0 { break }
+            
+            data.append(&buffer, count: length)
+        }
+        
+        stream.close()
+        
+        return data
+    }
 }
