@@ -42,8 +42,14 @@ class URLSessionHTTPClient {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = body
-        let task = session.dataTask(with: request) { _, _, _ in
-            completion(.failure(UnexpectedValuesRepresentation()))
+        let task = session.dataTask(with: request) { data, response, error in
+            switch (data, response, error) {
+            case let (_, _, .some(error)):
+                completion(.failure(error))
+                
+            default:
+                completion(.failure(UnexpectedValuesRepresentation()))
+            }
         }
         task.resume()
         return URLSessionTaskWrapper(wrapped: task)
@@ -65,7 +71,7 @@ class URLSessionHTTPClient {
     }
 }
 
-class URLSessionHTTPClientTests: XCTestCase {
+class URLSessionHTTPClientGETTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
         
@@ -82,24 +88,7 @@ class URLSessionHTTPClientTests: XCTestCase {
             exp.fulfill()
         }
         
-        makeSUT().get(from: url) { _ in }
-        
-        wait(for: [exp], timeout: 1.0)
-    }
-    
-    func test_postToURL_performsPOSTRequestWithURL() {
-        let url = anyURL()
-        let exp = expectation(description: "Wait for request")
-        let bodyData = anyData()
-        
-        URLProtocolStub.observerRequests { request in
-            XCTAssertEqual(request.url, url)
-            XCTAssertEqual(request.httpMethod, "POST")
-            XCTAssertEqual(request.httpBodyData, bodyData)
-            exp.fulfill()
-        }
-        
-        makeSUT().post(to: url, body: bodyData) { _ in }
+        makeSUT(testCase: self).get(from: url) { _ in }
         
         wait(for: [exp], timeout: 1.0)
     }
@@ -196,7 +185,7 @@ class URLSessionHTTPClientTests: XCTestCase {
     ) -> HTTPClient.Result {
         values.map { URLProtocolStub.stub(data: $0, response: $1, error: $2) }
         
-        let sut = makeSUT(file: file, line: line)
+        let sut = makeSUT(testCase: self, file: file, line: line)
         let exp = expectation(description: "Wait for request")
         
         var receivedResult: HTTPClient.Result!
@@ -210,23 +199,112 @@ class URLSessionHTTPClientTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
         return receivedResult
     }
-    
-    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> URLSessionHTTPClient {
-        let configuration = URLSessionConfiguration.ephemeral
-        configuration.protocolClasses = [URLProtocolStub.self]
-        let session = URLSession(configuration: configuration)
-        let sut = URLSessionHTTPClient(session: session)
-        trackForMemoryLeaks(sut, file: file, line: line)
-        return sut
+}
+
+class URLSessionHTTPClientPOSTTests: XCTestCase {
+    override func tearDown() {
+        super.tearDown()
+        
+        URLProtocolStub.removeStub()
     }
     
-    private func nonHTTPURLResponse() -> URLResponse {
-        URLResponse(url: anyURL(), mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
+    func test_postToURL_performsPOSTRequestWithURL() {
+        let url = anyURL()
+        let exp = expectation(description: "Wait for request")
+        let bodyData = anyData()
+        
+        URLProtocolStub.observerRequests { request in
+            XCTAssertEqual(request.url, url)
+            XCTAssertEqual(request.httpMethod, "POST")
+            XCTAssertEqual(request.httpBodyData, bodyData)
+            exp.fulfill()
+        }
+        
+        makeSUT(testCase: self).post(to: url, body: bodyData) { _ in }
+        
+        wait(for: [exp], timeout: 1.0)
     }
     
-    private func anyHTTPURLResponse() -> HTTPURLResponse {
-        HTTPURLResponse(url: anyURL(), statusCode: 200, httpVersion: nil, headerFields: nil)!
+    func test_cancelPostToURLTask_cancelsURLRequest() throws {
+        let receivedError = try XCTUnwrap(resultErrorForPostToUrl(taskHandler: { $0.cancel() }) as? NSError)
+
+        XCTAssertEqual(receivedError.code, URLError.cancelled.rawValue)
     }
+    
+    // MARK: - Helpers
+    
+    private func resultValuesForPostToUrl(
+        with values: (data: Data?, response: URLResponse?, error: Error?),
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> (data: Data, response: HTTPURLResponse)? {
+        let result = resultForPostToUrl(with: values, file: file, line: line)
+        
+        switch result {
+        case let .success((data, response)):
+            return (data, response)
+        default:
+            XCTFail("Expected success, got \(result) instead", file: file, line: line)
+            return nil
+        }
+    }
+    
+    private func resultErrorForPostToUrl(
+        with values: (data: Data?, response: URLResponse?, error: Error?)? = nil,
+        taskHandler: (HTTPClientTask) -> Void = { _ in },
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> Error? {
+        let result = resultForPostToUrl(with: values, taskHandler: taskHandler, file: file, line: line)
+        
+        switch result {
+        case let .failure(error):
+            return error
+        default:
+            XCTFail("Expected failure, got \(result) instead", file: file, line: line)
+            return nil
+        }
+    }
+    
+    private func resultForPostToUrl(
+        with values: (data: Data?, response: URLResponse?, error: Error?)?,
+        taskHandler: (HTTPClientTask) -> Void = { _ in },
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> HTTPClient.Result {
+        values.map { URLProtocolStub.stub(data: $0, response: $1, error: $2) }
+        
+        let sut = makeSUT(testCase: self, file: file, line: line)
+        let exp = expectation(description: "Wait for request")
+        
+        var receivedResult: HTTPClient.Result!
+        
+        let task = sut.post(to: anyURL(), body: anyData()) { result in
+            receivedResult = result
+            exp.fulfill()
+        }
+        taskHandler(task)
+        
+        wait(for: [exp], timeout: 1.0)
+        return receivedResult
+    }
+}
+
+private func makeSUT(testCase: XCTestCase, file: StaticString = #file, line: UInt = #line) -> URLSessionHTTPClient {
+    let configuration = URLSessionConfiguration.ephemeral
+    configuration.protocolClasses = [URLProtocolStub.self]
+    let session = URLSession(configuration: configuration)
+    let sut = URLSessionHTTPClient(session: session)
+    testCase.trackForMemoryLeaks(sut, file: file, line: line)
+    return sut
+}
+
+private func nonHTTPURLResponse() -> URLResponse {
+    URLResponse(url: anyURL(), mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
+}
+
+private func anyHTTPURLResponse() -> HTTPURLResponse {
+    HTTPURLResponse(url: anyURL(), statusCode: 200, httpVersion: nil, headerFields: nil)!
 }
 
 class URLProtocolStub: URLProtocol {
