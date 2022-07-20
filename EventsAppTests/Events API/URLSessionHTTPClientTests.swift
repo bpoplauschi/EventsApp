@@ -266,6 +266,17 @@ class URLSessionHTTPClientPOSTTests: XCTestCase {
         XCTAssertEqual(receivedValues.response.statusCode, response.statusCode)
     }
     
+    func test_postToURL_succeedsWithEmptyDataOnHTTPURLResponseWithNilData() throws {
+        let response = anyHTTPURLResponse()
+        
+        let receivedValues = try XCTUnwrap(resultValuesForPostToUrl(with: (data: nil, response: response, error: nil)))
+        
+        let emptyData = Data()
+        XCTAssertEqual(receivedValues.data, emptyData)
+        XCTAssertEqual(receivedValues.response.url, response.url)
+        XCTAssertEqual(receivedValues.response.statusCode, response.statusCode)
+    }
+    
     // MARK: - Helpers
     
     private func resultValuesForPostToUrl(
