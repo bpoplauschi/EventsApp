@@ -30,16 +30,18 @@ class URLSessionHTTPClient {
     @discardableResult
     func get(from url: URL, completion: @escaping (Result) -> Void) -> HTTPClientTask {
         let task = session.dataTask(with: url) { data, response, error in
-            switch (data, response, error) {
-            case let (_, _, .some(error)):
-                completion(.failure(error))
-                
-            case let (.some(data), .some(response as HTTPURLResponse), .none):
-                completion(.success((data, response)))
-                
-            default:
-                completion(.failure(UnexpectedValuesRepresentation()))
-            }
+            completion(Result {
+                switch (data, response, error) {
+                case let (_, _, .some(error)):
+                    throw error
+                    
+                case let (.some(data), .some(response as HTTPURLResponse), .none):
+                    return (data, response)
+                    
+                default:
+                    throw UnexpectedValuesRepresentation()
+                }
+            })
         }
         task.resume()
         return URLSessionTaskWrapper(wrapped: task)
