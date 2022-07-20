@@ -240,6 +240,18 @@ class URLSessionHTTPClientPOSTTests: XCTestCase {
         XCTAssertEqual((receivedError as NSError).code, requestError.code)
     }
     
+    func test_postToURL_failsOnAllInvalidRepresentations() {
+        XCTAssertNotNil(resultErrorForPostToUrl(with: (data: nil, response: nil, error: nil)))
+        XCTAssertNotNil(resultErrorForPostToUrl(with: (data: nil, response: nonHTTPURLResponse(), error: nil)))
+        XCTAssertNotNil(resultErrorForPostToUrl(with: (data: anyData(), response: nil, error: nil)))
+        XCTAssertNotNil(resultErrorForPostToUrl(with: (data: anyData(), response: nil, error: anyNSError())))
+        XCTAssertNotNil(resultErrorForPostToUrl(with: (data: nil, response: nonHTTPURLResponse(), error: anyNSError())))
+        XCTAssertNotNil(resultErrorForPostToUrl(with: (data: nil, response: anyHTTPURLResponse(), error: anyNSError())))
+        XCTAssertNotNil(resultErrorForPostToUrl(with: (data: anyData(), response: nonHTTPURLResponse(), error: anyNSError())))
+        XCTAssertNotNil(resultErrorForPostToUrl(with: (data: anyData(), response: anyHTTPURLResponse(), error: anyNSError())))
+        XCTAssertNotNil(resultErrorForPostToUrl(with: (data: anyData(), response: nonHTTPURLResponse(), error: nil)))
+    }
+    
     // MARK: - Helpers
     
     private func resultValuesForPostToUrl(
