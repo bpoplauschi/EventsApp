@@ -54,12 +54,33 @@ class URLSessionHTTPClientTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
-    func test_getFromURL_failsOnRequestError() {
+    func test_getFromURL_failsOnRequestError() throws {
         let requestError = anyNSError()
         
-        URLProtocolStub.stub(data: nil, response: nil, error: requestError)
+        let receivedError = try XCTUnwrap(resultErrorFor((data: nil, response: nil, error: requestError)))
         
-        let sut = makeSUT()
+        XCTAssertEqual((receivedError as NSError).domain, requestError.domain)
+        XCTAssertEqual((receivedError as NSError).code, requestError.code)
+    }
+    
+    // MARK: - Helpers
+    
+    private func resultErrorFor(_ values: (data: Data?, response: URLResponse?, error: Error?), file: StaticString = #file, line: UInt = #line) -> Error? {
+        let result = resultFor(values, file: file, line: line)
+        
+        switch result {
+        case let .failure(error):
+            return error
+        default:
+            XCTFail("Expected failure, got \(result) instead", file: file, line: line)
+            return nil
+        }
+    }
+    
+    private func resultFor(_ values: (data: Data?, response: URLResponse?, error: Error?), file: StaticString = #file, line: UInt = #line) -> HTTPClient.Result {
+        URLProtocolStub.stub(data: values.data, response: values.response, error: values.error)
+        
+        let sut = makeSUT(file: file, line: line)
         let exp = expectation(description: "Wait for request")
         
         var receivedResult: HTTPClient.Result!
@@ -69,18 +90,8 @@ class URLSessionHTTPClientTests: XCTestCase {
         }
         
         wait(for: [exp], timeout: 1.0)
-        
-        switch receivedResult {
-        case let .failure(error):
-            XCTAssertEqual((error as NSError).domain, requestError.domain)
-            XCTAssertEqual((error as NSError).code, requestError.code)
-            
-        default:
-            XCTFail("Expected failure, got \(String(describing: receivedResult)) instead")
-        }
+        return receivedResult
     }
-    
-    // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> URLSessionHTTPClient {
         let configuration = URLSessionConfiguration.ephemeral
