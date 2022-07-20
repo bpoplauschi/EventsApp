@@ -29,12 +29,7 @@ class URLSessionHTTPClient {
     
     @discardableResult
     func get(from url: URL, completion: @escaping (Result) -> Void) -> HTTPClientTask {
-        let task = session.dataTask(with: url) { [weak self] data, response, error in
-            guard let self = self else { return }
-            completion(self.createResult(fromData: data, response: response, error: error))
-        }
-        task.resume()
-        return URLSessionTaskWrapper(wrapped: task)
+        return createDataTask(from: URLRequest(url: url), completion: completion)
     }
     
     @discardableResult
@@ -42,17 +37,13 @@ class URLSessionHTTPClient {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = body
-        let task = session.dataTask(with: request) { data, response, error in
-            switch (data, response, error) {
-            case let (_, _, .some(error)):
-                completion(.failure(error))
-                
-            case let (.some(data), .some(response as HTTPURLResponse), .none):
-                completion(.success((data, response)))
-                
-            default:
-                completion(.failure(UnexpectedValuesRepresentation()))
-            }
+        return createDataTask(from: request, completion: completion)
+    }
+    
+    private func createDataTask(from urlRequest: URLRequest, completion: @escaping (Result) -> Void) -> HTTPClientTask {
+        let task = session.dataTask(with: urlRequest) { [weak self] data, response, error in
+            guard let self = self else { return }
+            completion(self.createResult(fromData: data, response: response, error: error))
         }
         task.resume()
         return URLSessionTaskWrapper(wrapped: task)
