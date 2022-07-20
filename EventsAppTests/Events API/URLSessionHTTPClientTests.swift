@@ -29,22 +29,27 @@ class URLSessionHTTPClient {
     
     @discardableResult
     func get(from url: URL, completion: @escaping (Result) -> Void) -> HTTPClientTask {
-        let task = session.dataTask(with: url) { data, response, error in
-            completion(Result {
-                switch (data, response, error) {
-                case let (_, _, .some(error)):
-                    throw error
-                    
-                case let (.some(data), .some(response as HTTPURLResponse), .none):
-                    return (data, response)
-                    
-                default:
-                    throw UnexpectedValuesRepresentation()
-                }
-            })
+        let task = session.dataTask(with: url) { [weak self] data, response, error in
+            guard let self = self else { return }
+            completion(self.createResult(fromData: data, response: response, error: error))
         }
         task.resume()
         return URLSessionTaskWrapper(wrapped: task)
+    }
+    
+    private func createResult(fromData data: Data?, response: URLResponse?, error: Error?) -> HTTPClient.Result {
+        Result {
+            switch (data, response, error) {
+            case let (_, _, .some(error)):
+                throw error
+                
+            case let (.some(data), .some(response as HTTPURLResponse), .none):
+                return (data, response)
+                
+            default:
+                throw UnexpectedValuesRepresentation()
+            }
+        }
     }
 }
 
