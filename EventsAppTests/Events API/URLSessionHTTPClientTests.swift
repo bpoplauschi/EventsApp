@@ -8,7 +8,7 @@
 import EventsApp
 import XCTest
 
-class URLSessionHTTPClient {
+class URLSessionHTTPClient: HTTPClient {
     private let session: URLSession
     
     typealias Result = HTTPClient.Result

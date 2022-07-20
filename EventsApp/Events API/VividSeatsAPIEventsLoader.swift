@@ -24,7 +24,7 @@ public final class VividSeatsAPIEventsLoader: EventsLoader {
     }
     
     public func load(completion: @escaping (Result) -> Void) {
-        httpClient.post(to: url) { [weak self] result in
+        httpClient.post(to: url, body: Data()) { [weak self] result in
             guard self != nil else { return }
             
             switch result {

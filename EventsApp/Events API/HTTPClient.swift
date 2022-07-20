@@ -18,5 +18,5 @@ public protocol HTTPClient {
     func get(from url: URL, completion: @escaping (Result) -> Void) -> HTTPClientTask
     
     @discardableResult
-    func post(to url: URL, completion: @escaping (Result) -> Void) -> HTTPClientTask
+    func post(to url: URL, body: Data, completion: @escaping (Result) -> Void) -> HTTPClientTask
 }
