@@ -47,6 +47,9 @@ class URLSessionHTTPClient {
             case let (_, _, .some(error)):
                 completion(.failure(error))
                 
+            case let (.some(data), .some(response as HTTPURLResponse), .none):
+                completion(.success((data, response)))
+                
             default:
                 completion(.failure(UnexpectedValuesRepresentation()))
             }
@@ -250,6 +253,17 @@ class URLSessionHTTPClientPOSTTests: XCTestCase {
         XCTAssertNotNil(resultErrorForPostToUrl(with: (data: anyData(), response: nonHTTPURLResponse(), error: anyNSError())))
         XCTAssertNotNil(resultErrorForPostToUrl(with: (data: anyData(), response: anyHTTPURLResponse(), error: anyNSError())))
         XCTAssertNotNil(resultErrorForPostToUrl(with: (data: anyData(), response: nonHTTPURLResponse(), error: nil)))
+    }
+    
+    func test_postToURL_succeedsOnHTTPURLResponseWithData() throws {
+        let data = anyData()
+        let response = anyHTTPURLResponse()
+        
+        let receivedValues = try XCTUnwrap(resultValuesForPostToUrl(with: (data: data, response: response, error: nil)))
+        
+        XCTAssertEqual(receivedValues.data, data)
+        XCTAssertEqual(receivedValues.response.url, response.url)
+        XCTAssertEqual(receivedValues.response.statusCode, response.statusCode)
     }
     
     // MARK: - Helpers
