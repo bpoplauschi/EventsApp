@@ -10,23 +10,25 @@ import Foundation
 public final class VividSeatsAPIEventsLoader: EventsLoader {
     private let url: URL
     private let httpClient: HTTPClient
-    private let jsonEncoder = JSONEncoder()
+    private let jsonEncoder: JSONEncoder
     
     public typealias Result = EventsLoader.Result
     
     public enum Error: Swift.Error {
         case connectivity
-        case invalidData
+        case invalidResponseData
+        case invalidRequestData
     }
     
-    public init(url: URL, httpClient: HTTPClient) {
+    public init(url: URL, httpClient: HTTPClient, jsonEncoder: JSONEncoder = JSONEncoder()) {
         self.url = url
         self.httpClient = httpClient
+        self.jsonEncoder = jsonEncoder
     }
     
     public func load(startDate: Date, endDate: Date, completion: @escaping (Result) -> Void) {
         guard let params = try? jsonEncoder.encode(LoadEventsRequest(startDate: startDate, endDate: endDate)) else {
-            completion(.failure(Error.invalidData))
+            completion(.failure(Error.invalidRequestData))
             return
         }
         

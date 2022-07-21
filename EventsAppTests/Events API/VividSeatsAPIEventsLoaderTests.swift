@@ -57,7 +57,7 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
         let responseCodes = [199, 201, 300, 400, 401, 404, 500]
         
         responseCodes.enumerated().forEach { index, responseCode in
-            expect(sut, toCompleteWith: failure(.invalidData), when: {
+            expect(sut, toCompleteWith: failure(.invalidResponseData), when: {
                 let json = makeEventsJSONData([])
                 httpClient.complete(withStatusCode: responseCode, data: json, at: index)
             })
@@ -67,7 +67,7 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
     func test_load_deliversErrorOn200HTTPResponseWithInvalidJSON() {
         let (sut, httpClient) = makeSUT()
         
-        expect(sut, toCompleteWith: failure(.invalidData), when: {
+        expect(sut, toCompleteWith: failure(.invalidResponseData), when: {
             let invalidJSON = Data("invalid json".utf8)
             httpClient.complete(withStatusCode: 200, data: invalidJSON)
         })
@@ -116,6 +116,13 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
         httpClient.complete(withStatusCode: 200, data: makeEventsJSONData([]))
 
         XCTAssertTrue(capturedResults.isEmpty)
+    }
+    
+    func test_load_deliversErrorOnJSONEncodingError() {
+        let httpClient = HTTPClientSpy()
+        let sut = VividSeatsAPIEventsLoader(url: anyURL(), httpClient: httpClient, jsonEncoder: FailingJSONEncoder())
+        
+        expect(sut, toCompleteWith: failure(.invalidRequestData), when: {})
     }
     
     // MARK: - Helpers
@@ -209,4 +216,12 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
     }
     
     private var endDateString: String { "2022-07-21" }
+}
+
+private final class FailingJSONEncoder: JSONEncoder {
+    private struct JSONEncodingError: Error {}
+    
+    override func encode<T>(_ value: T) throws -> Data where T : Encodable {
+        throw JSONEncodingError()
+    }
 }

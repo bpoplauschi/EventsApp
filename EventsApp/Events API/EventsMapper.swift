@@ -12,7 +12,7 @@ final class EventsMapper {
     
     static func map(_ data: Data, from response: HTTPURLResponse) throws -> [VividSeatsAPIEvent] {
         guard response.isSuccessful, let root = try? jsonDecoder.decode([VividSeatsAPIEvent].self, from: data) else {
-            throw VividSeatsAPIEventsLoader.Error.invalidData
+            throw VividSeatsAPIEventsLoader.Error.invalidResponseData
         }
         
         return root
