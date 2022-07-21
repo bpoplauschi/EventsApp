@@ -14,20 +14,34 @@ final class HTTPClientSpy: HTTPClient {
         func cancel() { callback() }
     }
     
-    private var messages: [(url: URL, body: Data?, completion: (HTTPClient.Result) -> Void)] = []
+    private struct Message {
+        enum HTTPMethod: String {
+            case get = "GET"
+            case post = "POST"
+        }
+        
+        let url: URL
+        let httpMethod: HTTPMethod
+        let httpBody: Data?
+        let completion: (HTTPClient.Result) -> Void
+    }
+    
+    private var messages: [Message] = []
     private (set) var cancelledURLs: [URL] = []
     
     var requestedURLs: [URL] { messages.map { $0.url } }
+    var requestedMethods: [String] { messages.map { $0.httpMethod.rawValue } }
+    var requestedBodies: [Data] { messages.compactMap { $0.httpBody } }
     
     func get(from url: URL, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
-        messages.append((url, nil, completion))
+        messages.append(Message(url: url, httpMethod: .get, httpBody: nil, completion: completion))
         return Task { [weak self] in
             self?.cancelledURLs.append(url)
         }
     }
     
     func post(to url: URL, body: Data, completion: @escaping (HTTPClient.Result) -> Void) -> HTTPClientTask {
-        messages.append((url, body, completion))
+        messages.append(Message(url: url, httpMethod: .post, httpBody: body, completion: completion))
         return Task { [weak self] in
             self?.cancelledURLs.append(url)
         }

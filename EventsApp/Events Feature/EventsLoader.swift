@@ -10,5 +10,5 @@ import Foundation
 public protocol EventsLoader {
     typealias Result = Swift.Result<[Event], Error>
     
-    func load(completion: @escaping (Result) -> Void)
+    func load(startDate: Date, endDate: Date, completion: @escaping (Result) -> Void)
 }

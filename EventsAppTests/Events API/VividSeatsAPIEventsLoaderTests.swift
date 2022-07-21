@@ -13,25 +13,34 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
         let (_, httpClient) = makeSUT()
         
         XCTAssertTrue(httpClient.requestedURLs.isEmpty)
+        XCTAssertTrue(httpClient.requestedMethods.isEmpty)
     }
     
-    func test_load_requestsData() {
+    func test_load_requestsData() throws {
         let url = URL(string: "https://a-concrete-url.com")!
         let (sut, httpClient) = makeSUT(url: url)
         
-        sut.load { _ in }
+        sut.load(startDate: startDate, endDate: endDate) { _ in }
         
         XCTAssertEqual(httpClient.requestedURLs, [url])
+        XCTAssertEqual(httpClient.requestedMethods, ["POST"])
+        XCTAssertEqual(httpClient.requestedBodies.count, 1)
+        let bodyData = try XCTUnwrap(httpClient.requestedBodies.first)
+        let body = try JSONDecoder().decode([String: String].self, from: bodyData)
+        XCTAssertEqual(body["startDate"], startDateString)
+        XCTAssertEqual(body["endDate"], endDateString)
+        XCTAssertEqual(body["includeSuggested"], "true")
     }
     
     func test_loadTwice_requestsDataTwice() {
         let url = URL(string: "https://a-concrete-url.com")!
         let (sut, httpClient) = makeSUT(url: url)
-        
-        sut.load { _ in }
-        sut.load { _ in }
-        
+
+        sut.load(startDate: startDate, endDate: endDate) { _ in }
+        sut.load(startDate: startDate, endDate: endDate) { _ in }
+
         XCTAssertEqual(httpClient.requestedURLs, [url, url])
+        XCTAssertEqual(httpClient.requestedMethods, ["POST", "POST"])
     }
     
     func test_load_deliversErrorOnClientError() {
@@ -99,13 +108,13 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
         let url = anyURL()
         let httpClient = HTTPClientSpy()
         var sut: VividSeatsAPIEventsLoader? = VividSeatsAPIEventsLoader(url: url, httpClient: httpClient)
-        
+
         var capturedResults: [VividSeatsAPIEventsLoader.Result] = []
-        sut?.load { capturedResults.append($0) }
-        
+        sut?.load(startDate: startDate, endDate: endDate) { capturedResults.append($0) }
+
         sut = nil
         httpClient.complete(withStatusCode: 200, data: makeEventsJSONData([]))
-        
+
         XCTAssertTrue(capturedResults.isEmpty)
     }
     
@@ -169,7 +178,7 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
     ) {
         let exp = expectation(description: "Wait for load completion")
         
-        sut.load { receivedResult in
+        sut.load(startDate: startDate, endDate: endDate) { receivedResult in
             switch (receivedResult, expectedResult) {
             case let (.success(receivedEvents), .success(expectedEvents)):
                 XCTAssertEqual(receivedEvents, expectedEvents, file: file, line: line)
@@ -188,4 +197,16 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
         
         wait(for: [exp], timeout: 1.0)
     }
+    
+    private var startDate: Date {
+        Date(timeIntervalSince1970: 1658275200) // Wednesday, 20 July 2022 00:00:00
+    }
+    
+    private var startDateString: String { "2022-07-20" }
+    
+    private var endDate: Date {
+        Date(timeIntervalSince1970: 1658361600) // Thursday, 21 July 2022 00:00:00
+    }
+    
+    private var endDateString: String { "2022-07-21" }
 }

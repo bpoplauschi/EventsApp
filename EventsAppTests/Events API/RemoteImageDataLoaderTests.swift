@@ -13,6 +13,7 @@ class RemoteImageDataLoaderTests: XCTestCase {
         let (_, httpClient) = makeSUT()
         
         XCTAssertTrue(httpClient.requestedURLs.isEmpty)
+        XCTAssertTrue(httpClient.requestedMethods.isEmpty)
     }
     
     func test_loadImageDataFromURL_requestsDataFromURL() {
@@ -22,6 +23,8 @@ class RemoteImageDataLoaderTests: XCTestCase {
         _ = sut.loadImageData(from: url) { _ in }
         
         XCTAssertEqual(httpClient.requestedURLs, [url])
+        XCTAssertEqual(httpClient.requestedMethods, ["GET"])
+        XCTAssertTrue(httpClient.requestedBodies.isEmpty)
     }
     
     func test_loadImageDataFromURLTwice_requestsDataFromURLTwice() {
@@ -32,6 +35,7 @@ class RemoteImageDataLoaderTests: XCTestCase {
         _ = sut.loadImageData(from: url) { _ in }
         
         XCTAssertEqual(httpClient.requestedURLs, [url, url])
+        XCTAssertEqual(httpClient.requestedMethods, ["GET", "GET"])
     }
     
     func test_loadImageDataFromURL_deliversConnectivityErrorOnClientError() {

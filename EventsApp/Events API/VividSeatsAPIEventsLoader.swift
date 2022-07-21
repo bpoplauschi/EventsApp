@@ -10,6 +10,7 @@ import Foundation
 public final class VividSeatsAPIEventsLoader: EventsLoader {
     private let url: URL
     private let httpClient: HTTPClient
+    private let jsonEncoder = JSONEncoder()
     
     public typealias Result = EventsLoader.Result
     
@@ -23,8 +24,13 @@ public final class VividSeatsAPIEventsLoader: EventsLoader {
         self.httpClient = httpClient
     }
     
-    public func load(completion: @escaping (Result) -> Void) {
-        httpClient.post(to: url, body: Data()) { [weak self] result in
+    public func load(startDate: Date, endDate: Date, completion: @escaping (Result) -> Void) {
+        guard let params = try? jsonEncoder.encode(LoadEventsRequest(startDate: startDate, endDate: endDate)) else {
+            completion(.failure(Error.invalidData))
+            return
+        }
+        
+        httpClient.post(to: url, body: params) { [weak self] result in
             guard self != nil else { return }
             
             switch result {
@@ -44,6 +50,20 @@ public final class VividSeatsAPIEventsLoader: EventsLoader {
         } catch {
             return .failure(error)
         }
+    }
+}
+
+private struct LoadEventsRequest: Encodable {
+    let startDate: String
+    let endDate: String
+    let includeSuggested: String
+    
+    init(startDate: Date, endDate: Date) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        self.startDate = dateFormatter.string(from: startDate)
+        self.endDate = dateFormatter.string(from: endDate)
+        self.includeSuggested = "true"
     }
 }
 
