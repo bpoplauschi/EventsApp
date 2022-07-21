@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4304688F288993FF0096411E /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4304688E288993FF0096411E /* URLSessionHTTPClient.swift */; };
+		430468912889945F0096411E /* URLProtocolStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430468902889945F0096411E /* URLProtocolStub.swift */; };
 		4371C33E28859728005A1275 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4371C33D28859728005A1275 /* XCTestCase+MemoryLeakTracking.swift */; };
 		437EADF32886E0C200210E09 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EADF22886E0C200210E09 /* HTTPClient.swift */; };
 		437EADF52886E10000210E09 /* VividSeatsAPIEventsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EADF42886E10000210E09 /* VividSeatsAPIEventsLoader.swift */; };
@@ -39,6 +41,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4304688E288993FF0096411E /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
+		430468902889945F0096411E /* URLProtocolStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLProtocolStub.swift; sourceTree = "<group>"; };
 		4371C33D28859728005A1275 /* XCTestCase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
 		437EADF22886E0C200210E09 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		437EADF42886E10000210E09 /* VividSeatsAPIEventsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VividSeatsAPIEventsLoader.swift; sourceTree = "<group>"; };
@@ -99,6 +103,7 @@
 				437EADF62886E13B00210E09 /* EventsMapper.swift */,
 				437EADF82886E14C00210E09 /* VividSeatsAPIEvent.swift */,
 				437EAE072886FCFC00210E09 /* RemoteImageDataLoader.swift */,
+				4304688E288993FF0096411E /* URLSessionHTTPClient.swift */,
 			);
 			path = "Events API";
 			sourceTree = "<group>";
@@ -126,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				437EADFF2886E23A00210E09 /* HTTPClientSpy.swift */,
+				430468902889945F0096411E /* URLProtocolStub.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -293,6 +299,7 @@
 				437EADF72886E13B00210E09 /* EventsMapper.swift in Sources */,
 				437EADFC2886E1AE00210E09 /* HTTPURLResponse+StatusCode.swift in Sources */,
 				43D085322880331600F93724 /* SceneDelegate.swift in Sources */,
+				4304688F288993FF0096411E /* URLSessionHTTPClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,6 +308,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				437EAE042886E78900210E09 /* RemoteImageDataLoaderTests.swift in Sources */,
+				430468912889945F0096411E /* URLProtocolStub.swift in Sources */,
 				437EAE0A2886FD9200210E09 /* URLSessionHTTPClientTests.swift in Sources */,
 				437EAE062886E83C00210E09 /* TestHelpers.swift in Sources */,
 				43D0856728804D7D00F93724 /* VividSeatsAPIEventsLoaderTests.swift in Sources */,

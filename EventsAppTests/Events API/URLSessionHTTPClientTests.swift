@@ -8,63 +8,6 @@
 import EventsApp
 import XCTest
 
-class URLSessionHTTPClient: HTTPClient {
-    private let session: URLSession
-    
-    typealias Result = HTTPClient.Result
-    
-    private struct UnexpectedValuesRepresentation: Error {}
-    
-    private struct URLSessionTaskWrapper: HTTPClientTask {
-        let wrapped: URLSessionTask
-        
-        func cancel() {
-            wrapped.cancel()
-        }
-    }
-    
-    init(session: URLSession) {
-        self.session = session
-    }
-    
-    @discardableResult
-    func get(from url: URL, completion: @escaping (Result) -> Void) -> HTTPClientTask {
-        return createDataTask(from: URLRequest(url: url), completion: completion)
-    }
-    
-    @discardableResult
-    func post(to url: URL, body: Data, completion: @escaping (Result) -> Void) -> HTTPClientTask {
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = body
-        return createDataTask(from: request, completion: completion)
-    }
-    
-    private func createDataTask(from urlRequest: URLRequest, completion: @escaping (Result) -> Void) -> HTTPClientTask {
-        let task = session.dataTask(with: urlRequest) { [weak self] data, response, error in
-            guard let self = self else { return }
-            completion(self.createResult(fromData: data, response: response, error: error))
-        }
-        task.resume()
-        return URLSessionTaskWrapper(wrapped: task)
-    }
-    
-    private func createResult(fromData data: Data?, response: URLResponse?, error: Error?) -> HTTPClient.Result {
-        Result {
-            switch (data, response, error) {
-            case let (_, _, .some(error)):
-                throw error
-                
-            case let (.some(data), .some(response as HTTPURLResponse), .none):
-                return (data, response)
-                
-            default:
-                throw UnexpectedValuesRepresentation()
-            }
-        }
-    }
-}
-
 class URLSessionHTTPClientGETTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
@@ -344,60 +287,7 @@ private func anyHTTPURLResponse() -> HTTPURLResponse {
     HTTPURLResponse(url: anyURL(), statusCode: 200, httpVersion: nil, headerFields: nil)!
 }
 
-class URLProtocolStub: URLProtocol {
-    private struct Stub {
-        let data: Data?
-        let response: URLResponse?
-        let error: Error?
-        let requestObserver: ((URLRequest) -> Void)?
-    }
-    
-    private static var stub: Stub?
-    
-    static func stub(data: Data?, response: URLResponse?, error: Error?) {
-        stub = Stub(data: data, response: response, error: error, requestObserver: nil)
-    }
-    
-    static func observerRequests(observer: @escaping (URLRequest) -> Void) {
-        stub = Stub(data: nil, response: nil, error: nil, requestObserver: observer)
-    }
-    
-    static func removeStub() {
-        stub = nil
-    }
-    
-    override class func canInit(with request: URLRequest) -> Bool {
-        true
-    }
-    
-    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
-        request
-    }
-    
-    override func startLoading() {
-        guard let stub = URLProtocolStub.stub else { return }
-        
-        if let data = stub.data {
-            client?.urlProtocol(self, didLoad: data)
-        }
-        
-        if let response = stub.response {
-            client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
-        }
-        
-        if let error = stub.error {
-            client?.urlProtocol(self, didFailWithError: error)
-        } else {
-            client?.urlProtocolDidFinishLoading(self)
-        }
-        
-        stub.requestObserver?(request)
-    }
-    
-    override func stopLoading() {}
-}
-
-extension URLRequest {
+private extension URLRequest {
     var httpBodyData: Data? {
         guard let stream = httpBodyStream else { return httpBody }
         
