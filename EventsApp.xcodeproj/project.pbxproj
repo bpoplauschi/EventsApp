@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4304688F288993FF0096411E /* URLSessionHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4304688E288993FF0096411E /* URLSessionHTTPClient.swift */; };
 		430468912889945F0096411E /* URLProtocolStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 430468902889945F0096411E /* URLProtocolStub.swift */; };
+		4311D83D288C52D100FD4D69 /* EventsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4311D83C288C52D100FD4D69 /* EventsViewControllerTests.swift */; };
 		4371C33E28859728005A1275 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4371C33D28859728005A1275 /* XCTestCase+MemoryLeakTracking.swift */; };
 		437EADF32886E0C200210E09 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EADF22886E0C200210E09 /* HTTPClient.swift */; };
 		437EADF52886E10000210E09 /* VividSeatsAPIEventsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EADF42886E10000210E09 /* VividSeatsAPIEventsLoader.swift */; };
@@ -43,6 +44,7 @@
 /* Begin PBXFileReference section */
 		4304688E288993FF0096411E /* URLSessionHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClient.swift; sourceTree = "<group>"; };
 		430468902889945F0096411E /* URLProtocolStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLProtocolStub.swift; sourceTree = "<group>"; };
+		4311D83C288C52D100FD4D69 /* EventsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewControllerTests.swift; sourceTree = "<group>"; };
 		4371C33D28859728005A1275 /* XCTestCase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
 		437EADF22886E0C200210E09 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
 		437EADF42886E10000210E09 /* VividSeatsAPIEventsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VividSeatsAPIEventsLoader.swift; sourceTree = "<group>"; };
@@ -85,6 +87,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4311D83B288C51D700FD4D69 /* Events UI */ = {
+			isa = PBXGroup;
+			children = (
+				4311D83C288C52D100FD4D69 /* EventsViewControllerTests.swift */,
+			);
+			path = "Events UI";
+			sourceTree = "<group>";
+		};
 		4371C33C28859717005A1275 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -172,6 +182,7 @@
 			isa = PBXGroup;
 			children = (
 				437EADFD2886E22500210E09 /* Events API */,
+				4311D83B288C51D700FD4D69 /* Events UI */,
 				4371C33C28859717005A1275 /* Helpers */,
 			);
 			path = EventsAppTests;
@@ -308,6 +319,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				437EAE042886E78900210E09 /* RemoteImageDataLoaderTests.swift in Sources */,
+				4311D83D288C52D100FD4D69 /* EventsViewControllerTests.swift in Sources */,
 				430468912889945F0096411E /* URLProtocolStub.swift in Sources */,
 				437EAE0A2886FD9200210E09 /* URLSessionHTTPClientTests.swift in Sources */,
 				437EAE062886E83C00210E09 /* TestHelpers.swift in Sources */,
