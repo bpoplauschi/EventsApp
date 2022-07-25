@@ -9,30 +9,6 @@ import EventsApp
 import UIKit
 import XCTest
 
-class EventsViewController: UITableViewController {
-    private var loader: EventsLoader?
-    
-    convenience init(loader: EventsLoader) {
-        self.init()
-        self.loader = loader
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        refresh()
-    }
-    
-    @objc private func refresh() {
-        refreshControl?.beginRefreshing()
-        loader?.load(startDate: Date(), endDate: Date()) { [weak self] _ in
-            self?.refreshControl?.endRefreshing()
-        }
-    }
-}
-
 class EventsViewControllerTests: XCTestCase {
     func test_loadEventsActions_requestEventsFromLoader() {
         let (sut, loader) = makeSUT()
