@@ -27,7 +27,9 @@ class EventsViewController: UITableViewController {
     }
     
     @objc private func refresh() {
-        loader?.load(startDate: Date(), endDate: Date()) { _ in }
+        loader?.load(startDate: Date(), endDate: Date()) { [weak self] _ in
+            self?.refreshControl?.endRefreshing()
+        }
     }
 }
 
@@ -65,6 +67,15 @@ class EventsViewControllerTests: XCTestCase {
         XCTAssertEqual(sut.refreshControl?.isRefreshing, true)
     }
     
+    func test_viewDidLoad_hidesLoadingIndicatorOnLoaderCompletion() {
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.complete()
+        
+        XCTAssertEqual(sut.refreshControl?.isRefreshing, false)
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: EventsViewController, loader: EventsLoaderSpy) {
@@ -76,10 +87,15 @@ class EventsViewControllerTests: XCTestCase {
     }
     
     private class EventsLoaderSpy: EventsLoader {
-        private(set) var loadCallCount: Int = 0
+        private var completions: [(EventsLoader.Result) -> Void] = []
+        var loadCallCount: Int { completions.count }
         
         func load(startDate: Date, endDate: Date, completion: @escaping (EventsLoader.Result) -> Void) {
-            loadCallCount += 1
+            completions.append(completion)
+        }
+        
+        func complete() {
+            completions[0](.success([]))
         }
     }
 }
