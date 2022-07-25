@@ -48,14 +48,14 @@ class EventsViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.loadCallCount, 1)
     }
     
-    func test_pullToRefresh_loadsEvents() {
+    func test_userInitiatedReload_loadsEvents() {
         let (sut, loader) = makeSUT()
         sut.loadViewIfNeeded()
         
-        sut.refreshControl?.simulatePullToRefresh()
+        sut.simulateUserInitiatedRefresh()
         XCTAssertEqual(loader.loadCallCount, 2)
         
-        sut.refreshControl?.simulatePullToRefresh()
+        sut.simulateUserInitiatedRefresh()
         XCTAssertEqual(loader.loadCallCount, 3)
     }
     
@@ -76,18 +76,18 @@ class EventsViewControllerTests: XCTestCase {
         XCTAssertEqual(sut.refreshControl?.isRefreshing, false)
     }
     
-    func test_pullToRefresh_showsLoadingIndicator() {
+    func test_userInitiatedReload_showsLoadingIndicator() {
         let (sut, _) = makeSUT()
         
-        sut.refreshControl?.simulatePullToRefresh()
+        sut.simulateUserInitiatedRefresh()
         
         XCTAssertEqual(sut.refreshControl?.isRefreshing, true)
     }
     
-    func test_pullToRefresh_hidesLoadingIndicatorOnLoaderCompletion() {
+    func test_userInitiatedReload_hidesLoadingIndicatorOnLoaderCompletion() {
         let (sut, loader) = makeSUT()
         
-        sut.refreshControl?.simulatePullToRefresh()
+        sut.simulateUserInitiatedRefresh()
         loader.complete()
         
         XCTAssertEqual(sut.refreshControl?.isRefreshing, false)
@@ -114,6 +114,12 @@ class EventsViewControllerTests: XCTestCase {
         func complete() {
             completions[0](.success([]))
         }
+    }
+}
+
+private extension EventsViewController {
+    func simulateUserInitiatedRefresh() {
+        refreshControl?.simulatePullToRefresh()
     }
 }
 
