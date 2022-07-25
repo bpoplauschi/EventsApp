@@ -22,11 +22,11 @@ class EventsViewController: UITableViewController {
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        refreshControl?.beginRefreshing()
         refresh()
     }
     
     @objc private func refresh() {
+        refreshControl?.beginRefreshing()
         loader?.load(startDate: Date(), endDate: Date()) { [weak self] _ in
             self?.refreshControl?.endRefreshing()
         }
@@ -34,63 +34,34 @@ class EventsViewController: UITableViewController {
 }
 
 class EventsViewControllerTests: XCTestCase {
-    func test_init_doesNotLoadEvents() {
-        let (_, loader) = makeSUT()
+    func test_loadEventsActions_requestEventsFromLoader() {
+        let (sut, loader) = makeSUT()
+        XCTAssertEqual(loader.loadCallCount, 0, "Expected no load requests before view is loaded")
         
-        XCTAssertEqual(loader.loadCallCount, 0)
+        sut.loadViewIfNeeded()
+        XCTAssertEqual(loader.loadCallCount, 1, "Expected a load request once view is loaded")
+        
+        sut.simulateUserInitiatedRefresh()
+        XCTAssertEqual(loader.loadCallCount, 2, "Expected another load request once user initiates a load")
+        
+        sut.simulateUserInitiatedRefresh()
+        XCTAssertEqual(loader.loadCallCount, 3, "Expected a third load request once user initiates another load")
     }
     
-    func test_viewDidLoad_loadsEvents() {
+    func test_loadingIndicator_isVisibleWhenLoadingEvents() {
         let (sut, loader) = makeSUT()
         
         sut.loadViewIfNeeded()
-        
-        XCTAssertEqual(loader.loadCallCount, 1)
-    }
-    
-    func test_userInitiatedReload_loadsEvents() {
-        let (sut, loader) = makeSUT()
-        sut.loadViewIfNeeded()
+        XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once view is loaded")
+
+        loader.complete(at: 0)
+        XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once loading is completed")
         
         sut.simulateUserInitiatedRefresh()
-        XCTAssertEqual(loader.loadCallCount, 2)
+        XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once user initiates a refresh")
         
-        sut.simulateUserInitiatedRefresh()
-        XCTAssertEqual(loader.loadCallCount, 3)
-    }
-    
-    func test_viewDidLoad_showsLoadingIndicator() {
-        let (sut, _) = makeSUT()
-        
-        sut.loadViewIfNeeded()
-        
-        XCTAssertTrue(sut.isShowingLoadingIndicator)
-    }
-    
-    func test_viewDidLoad_hidesLoadingIndicatorOnLoaderCompletion() {
-        let (sut, loader) = makeSUT()
-        
-        sut.loadViewIfNeeded()
-        loader.complete()
-        
-        XCTAssertFalse(sut.isShowingLoadingIndicator)
-    }
-    
-    func test_userInitiatedReload_showsLoadingIndicator() {
-        let (sut, _) = makeSUT()
-        
-        sut.simulateUserInitiatedRefresh()
-        
-        XCTAssertTrue(sut.isShowingLoadingIndicator)
-    }
-    
-    func test_userInitiatedReload_hidesLoadingIndicatorOnLoaderCompletion() {
-        let (sut, loader) = makeSUT()
-        
-        sut.simulateUserInitiatedRefresh()
-        loader.complete()
-        
-        XCTAssertFalse(sut.isShowingLoadingIndicator)
+        loader.complete(at: 1)
+        XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once user initiated refresh is completed")
     }
     
     // MARK: - Helpers
@@ -111,8 +82,8 @@ class EventsViewControllerTests: XCTestCase {
             completions.append(completion)
         }
         
-        func complete() {
-            completions[0](.success([]))
+        func complete(at index: Int) {
+            completions[index](.success([]))
         }
     }
 }
