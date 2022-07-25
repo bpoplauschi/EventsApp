@@ -9,8 +9,18 @@ import EventsApp
 import UIKit
 import XCTest
 
-class EventsViewController {
-    init(loader: EventsLoader) {
+class EventsViewController: UIViewController {
+    private var loader: EventsLoader?
+    
+    convenience init(loader: EventsLoader) {
+        self.init()
+        self.loader = loader
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        loader?.load(startDate: Date(), endDate: Date()) { _ in }
     }
 }
 
@@ -20,6 +30,15 @@ class EventsViewControllerTests: XCTestCase {
         _ = EventsViewController(loader: loader)
         
         XCTAssertEqual(loader.loadCallCount, 0)
+    }
+    
+    func test_viewDidLoad_loadsEvents() {
+        let loader = EventsLoaderSpy()
+        let sut = EventsViewController(loader: loader)
+        
+        sut.loadViewIfNeeded()
+        
+        XCTAssertEqual(loader.loadCallCount, 1)
     }
     
     // MARK: - Helpers
