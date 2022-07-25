@@ -64,7 +64,7 @@ class EventsViewControllerTests: XCTestCase {
         
         sut.loadViewIfNeeded()
         
-        XCTAssertEqual(sut.refreshControl?.isRefreshing, true)
+        XCTAssertTrue(sut.isShowingLoadingIndicator)
     }
     
     func test_viewDidLoad_hidesLoadingIndicatorOnLoaderCompletion() {
@@ -73,7 +73,7 @@ class EventsViewControllerTests: XCTestCase {
         sut.loadViewIfNeeded()
         loader.complete()
         
-        XCTAssertEqual(sut.refreshControl?.isRefreshing, false)
+        XCTAssertFalse(sut.isShowingLoadingIndicator)
     }
     
     func test_userInitiatedReload_showsLoadingIndicator() {
@@ -81,7 +81,7 @@ class EventsViewControllerTests: XCTestCase {
         
         sut.simulateUserInitiatedRefresh()
         
-        XCTAssertEqual(sut.refreshControl?.isRefreshing, true)
+        XCTAssertTrue(sut.isShowingLoadingIndicator)
     }
     
     func test_userInitiatedReload_hidesLoadingIndicatorOnLoaderCompletion() {
@@ -90,7 +90,7 @@ class EventsViewControllerTests: XCTestCase {
         sut.simulateUserInitiatedRefresh()
         loader.complete()
         
-        XCTAssertEqual(sut.refreshControl?.isRefreshing, false)
+        XCTAssertFalse(sut.isShowingLoadingIndicator)
     }
     
     // MARK: - Helpers
@@ -120,6 +120,10 @@ class EventsViewControllerTests: XCTestCase {
 private extension EventsViewController {
     func simulateUserInitiatedRefresh() {
         refreshControl?.simulatePullToRefresh()
+    }
+    
+    var isShowingLoadingIndicator: Bool {
+        refreshControl?.isRefreshing == true
     }
 }
 
