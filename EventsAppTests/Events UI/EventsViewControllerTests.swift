@@ -22,6 +22,7 @@ class EventsViewController: UITableViewController {
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        refreshControl?.beginRefreshing()
         refresh()
     }
     
@@ -54,6 +55,14 @@ class EventsViewControllerTests: XCTestCase {
         
         sut.refreshControl?.simulatePullToRefresh()
         XCTAssertEqual(loader.loadCallCount, 3)
+    }
+    
+    func test_viewDidLoad_showsLoadingIndicator() {
+        let (sut, _) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        
+        XCTAssertEqual(sut.refreshControl?.isRefreshing, true)
     }
     
     // MARK: - Helpers
