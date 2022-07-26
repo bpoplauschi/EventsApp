@@ -49,8 +49,11 @@ public final class EventsViewController: UITableViewController {
         cell.locationLabel.text = cellModel.location
         cell.dateIntervalLabel.text = cellModel.dateInterval
         cell.countLabel.text = "\(cellModel.count) events"
+        cell.imageContainer.startShimmering()
         if let imageURL = cellModel.imageURL {
-            imageLoadingTasks[indexPath] = imageLoader?.loadImageData(from: imageURL) { _ in }
+            imageLoadingTasks[indexPath] = imageLoader?.loadImageData(from: imageURL) { _ in
+                cell.imageContainer.stopShimmering()
+            }
         }
         return cell
     }

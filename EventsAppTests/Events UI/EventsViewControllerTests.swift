@@ -36,7 +36,7 @@ class EventsViewControllerTests: XCTestCase {
         sut.simulateUserInitiatedRefresh()
         XCTAssertTrue(sut.isShowingLoadingIndicator, "Expected loading indicator once user initiates a refresh")
         
-        loader.complete(withErrorAt: 1)
+        loader.completeWithError(at: 1)
         XCTAssertFalse(sut.isShowingLoadingIndicator, "Expected no loading indicator once user initiated refresh completes with error")
     }
     
@@ -67,7 +67,7 @@ class EventsViewControllerTests: XCTestCase {
         assertThat(sut, isRendering: [event0])
         
         sut.simulateUserInitiatedRefresh()
-        loader.complete(withErrorAt: 1)
+        loader.completeWithError(at: 1)
         assertThat(sut, isRendering: [event0])
     }
     
@@ -109,6 +109,28 @@ class EventsViewControllerTests: XCTestCase {
         
         sut.simulateEventImageViewNotVisible(at: 2)
         XCTAssertEqual(loader.cancelledImageURLs, [event1.imageURL, event2.imageURL], "Expected cancelled third image URL requests once third view is not visible anymore")
+    }
+    
+    func test_eventImageViewLoadingIndicator_isVisibleWhenLoadingImage() {
+        let event0 = Event(name: "name 1", location: "location 1", dateInterval: "date interval 1", count: 1, imageURL: URL(string: "http://image-url1.com")!)
+        let event1 = Event(name: "name 2", location: "location 2", dateInterval: "date interval 2", count: 1, imageURL: URL(string: "http://image-url2.com")!)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.complete(with: [event0, event1], at: 0)
+        
+        let view0 = sut.simulateEventImageViewVisible(at: 0)
+        let view1 = sut.simulateEventImageViewVisible(at: 1)
+        XCTAssertEqual(view0?.isShowingImageLoadingIndicator, true, "Expected loading indicator for first view while loading first image")
+        XCTAssertEqual(view1?.isShowingImageLoadingIndicator, true, "Expected loading indicator for second view while loading second image")
+        
+        loader.completeImageLoading(at: 0)
+        XCTAssertEqual(view0?.isShowingImageLoadingIndicator, false, "Expected no loading indicator for first view once first image loading completes successfully")
+        XCTAssertEqual(view1?.isShowingImageLoadingIndicator, true, "Expected loading indicator for second view while loading second image")
+        
+        loader.completeImageLoadingWithError(at: 1)
+        XCTAssertEqual(view0?.isShowingImageLoadingIndicator, false, "Expected no loading indicator for first view once first image loading completes successfully")
+        XCTAssertEqual(view1?.isShowingImageLoadingIndicator, false, "Expected no loading indicator for second view once second image loading completes with error")
     }
     
     // MARK: - Helpers
@@ -157,21 +179,21 @@ class EventsViewControllerTests: XCTestCase {
     
     private class EventsLoaderSpy: EventsLoader, ImageDataLoader {
         // MARK: - EventsLoader
-        private var eventsCompletions: [(EventsLoader.Result) -> Void] = []
+        private var eventsRequests: [(EventsLoader.Result) -> Void] = []
         
-        var loadCallCount: Int { eventsCompletions.count }
+        var loadCallCount: Int { eventsRequests.count }
         
         func load(startDate: Date, endDate: Date, completion: @escaping (EventsLoader.Result) -> Void) {
-            eventsCompletions.append(completion)
+            eventsRequests.append(completion)
         }
         
         func complete(with events: [Event] = [], at index: Int) {
-            eventsCompletions[index](.success(events))
+            eventsRequests[index](.success(events))
         }
         
-        func complete(withErrorAt index: Int) {
+        func completeWithError(at index: Int) {
             let error = NSError(domain: "an error", code: 0)
-            eventsCompletions[index](.failure(error))
+            eventsRequests[index](.failure(error))
         }
         
         // MARK: - ImageDataLoader
@@ -182,14 +204,24 @@ class EventsViewControllerTests: XCTestCase {
             }
         }
         
-        private(set) var loadedImageURLs: [URL] = []
+        private var imageRequests: [(url: URL, completion: (ImageDataLoader.Result) -> Void)] = []
+        var loadedImageURLs: [URL] { imageRequests.map { $0.url } }
         private(set) var cancelledImageURLs: [URL] = []
         
         func loadImageData(from url: URL, completion: @escaping (ImageDataLoader.Result) -> Void) -> ImageDataLoaderTask {
-            loadedImageURLs.append(url)
+            imageRequests.append((url, completion))
             return ImageDataLoaderTaskSpy { [weak self] in
                 self?.cancelledImageURLs.append(url)
             }
+        }
+        
+        func completeImageLoading(with imageData: Data = Data(), at index: Int = 0) {
+            imageRequests[index].completion(.success(imageData))
+        }
+        
+        func completeImageLoadingWithError(at index: Int = 0) {
+            let error = NSError(domain: "an error", code: 0)
+            imageRequests[index].completion(.failure(error))
         }
     }
 }
@@ -230,6 +262,8 @@ private extension EventsViewController {
 }
 
 private extension EventCell {
+    var isShowingImageLoadingIndicator: Bool { imageContainer.isShimmering }
+    
     var nameText: String? { nameLabel.text }
     var locationText: String? { locationLabel.text }
     var dateIntervalText: String? { dateIntervalLabel.text }
