@@ -58,6 +58,19 @@ class EventsViewControllerTests: XCTestCase {
         assertThat(sut, isRendering: [event0, event1, event2, event3])
     }
     
+    func test_loadEventsCompletion_doesNotAlterCurrentRenderingStateOnError() {
+        let event0 = Event(name: "a name", location: "a location", dateInterval: "a date interval", count: 1, imageURL: URL(string: "http://a-specific-url.com")!)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.complete(with: [event0], at: 0)
+        assertThat(sut, isRendering: [event0])
+        
+        sut.simulateUserInitiatedRefresh()
+        loader.complete(withErrorAt: 1)
+        assertThat(sut, isRendering: [event0])
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: EventsViewController, loader: EventsLoaderSpy) {
@@ -112,6 +125,11 @@ class EventsViewControllerTests: XCTestCase {
         
         func complete(with events: [Event] = [], at index: Int) {
             completions[index](.success(events))
+        }
+        
+        func complete(withErrorAt index: Int) {
+            let error = NSError(domain: "an error", code: 0)
+            completions[index](.failure(error))
         }
     }
 }

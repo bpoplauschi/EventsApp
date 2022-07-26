@@ -27,9 +27,15 @@ public final class EventsViewController: UITableViewController {
     @objc private func refresh() {
         refreshControl?.beginRefreshing()
         loader?.load(startDate: Date(), endDate: Date()) { [weak self] result in
-            self?.tableModel = (try? result.get()) ?? []
-            self?.tableView.reloadData()
-            self?.refreshControl?.endRefreshing()
+            switch result {
+            case let .success(events):
+                self?.tableModel = events
+                self?.tableView.reloadData()
+                self?.refreshControl?.endRefreshing()
+                
+            case .failure:
+                break
+            }
         }
     }
     
