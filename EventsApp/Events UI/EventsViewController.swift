@@ -63,16 +63,26 @@ public final class EventsViewController: UITableViewController, UITableViewDataS
     }
     
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        imageLoadingTasks[indexPath]?.cancel()
-        imageLoadingTasks[indexPath] = nil
+        cancelImageLoadingTask(forRowAt: indexPath)
     }
     
     public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
             let cellModel = tableModel[indexPath.row]
             if let imageURL = cellModel.imageURL {
-                _ = imageLoader?.loadImageData(from: imageURL) { _ in }
+                imageLoadingTasks[indexPath] = imageLoader?.loadImageData(from: imageURL) { _ in }
             }
         }
+    }
+    
+    public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
+        indexPaths.forEach { indexPath in
+            cancelImageLoadingTask(forRowAt: indexPath)
+        }
+    }
+    
+    private func cancelImageLoadingTask(forRowAt indexPath: IndexPath) {
+        imageLoadingTasks[indexPath]?.cancel()
+        imageLoadingTasks[indexPath] = nil
     }
 }

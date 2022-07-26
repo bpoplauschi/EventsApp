@@ -177,6 +177,22 @@ class EventsViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.loadedImageURLs, [event1.imageURL, event2.imageURL], "Expected third image URL request once third image is near visible")
     }
     
+    func test_eventImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore() {
+        let event0 = Event(name: "name 1", location: "location 1", dateInterval: "date interval 1", count: 1, imageURL: URL(string: "http://image-url1.com")!)
+        let event1 = Event(name: "name 2", location: "location 2", dateInterval: "date interval 2", count: 1, imageURL: URL(string: "http://image-url2.com")!)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.complete(with: [event0, event1], at: 0)
+        XCTAssertEqual(loader.cancelledImageURLs, [], "Expected no cancelled image URL requests until image is not near visible anymore")
+        
+        sut.simulateEventImageViewNotNearVisible(at: 0)
+        XCTAssertEqual(loader.cancelledImageURLs, [event0.imageURL], "Expected first cancelled image URL request once first image is not near visible anymore")
+        
+        sut.simulateEventImageViewNotNearVisible(at: 1)
+        XCTAssertEqual(loader.cancelledImageURLs, [event0.imageURL, event1.imageURL], "Expected second cancelled image URL request once second image is not near visible anymore")
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: EventsViewController, loader: EventsLoaderSpy) {
@@ -292,6 +308,14 @@ private extension EventsViewController {
         let delegate = tableView.delegate
         let index = IndexPath(row: row, section: eventsSection)
         delegate?.tableView?(tableView, didEndDisplaying: view!, forRowAt: index)
+    }
+    
+    func simulateEventImageViewNotNearVisible(at row: Int) {
+        simulateEventImageViewNearVisible(at: row)
+        
+        let dataSource = tableView.prefetchDataSource
+        let index = IndexPath(row: row, section: eventsSection)
+        dataSource?.tableView?(tableView, cancelPrefetchingForRowsAt: [index])
     }
     
     var isShowingLoadingIndicator: Bool {
