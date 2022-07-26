@@ -71,11 +71,32 @@ class EventsViewControllerTests: XCTestCase {
         assertThat(sut, isRendering: [event0])
     }
     
+    func test_eventImageView_loadsImageURLWhenVisible() {
+        let event0 = Event(name: "name", location: "location", dateInterval: "date interval", count: 1, imageURL: nil)
+        let event1 = Event(name: "name 1", location: "location 1", dateInterval: "date interval 1", count: 1, imageURL: URL(string: "http://image-url1.com")!)
+        let event2 = Event(name: "name 2", location: "location 2", dateInterval: "date interval 2", count: 1, imageURL: URL(string: "http://image-url2.com")!)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.complete(with: [event0, event1, event2], at: 0)
+        
+        XCTAssertEqual(loader.loadedImageURLs, [], "Expected no image URL requests until views become visible")
+        
+        sut.simulateEventImageViewVisible(at: 0)
+        XCTAssertEqual(loader.loadedImageURLs, [], "Expected no image URL requests once first view with nil image url becomes visible")
+        
+        sut.simulateEventImageViewVisible(at: 1)
+        XCTAssertEqual(loader.loadedImageURLs, [event1.imageURL], "Expected seconds image URL requests once second view also becomes visible")
+        
+        sut.simulateEventImageViewVisible(at: 2)
+        XCTAssertEqual(loader.loadedImageURLs, [event1.imageURL, event2.imageURL], "Expected third image URL requests once third view also becomes visible")
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: EventsViewController, loader: EventsLoaderSpy) {
         let loader = EventsLoaderSpy()
-        let sut = EventsViewController(loader: loader)
+        let sut = EventsViewController(eventsLoader: loader, imageLoader: loader)
         trackForMemoryLeaks(loader)
         trackForMemoryLeaks(sut)
         return (sut, loader)
@@ -115,21 +136,35 @@ class EventsViewControllerTests: XCTestCase {
         XCTAssertEqual(cell.countText, "\(event.count) events", "Expected events count text to be \(String(describing: "\(event.count) events")) for cell at index (\(index))", file: file, line: line)
     }
     
-    private class EventsLoaderSpy: EventsLoader {
-        private var completions: [(EventsLoader.Result) -> Void] = []
-        var loadCallCount: Int { completions.count }
+    private class EventsLoaderSpy: EventsLoader, ImageDataLoader {
+        // MARK: - EventsLoader
+        private var eventsCompletions: [(EventsLoader.Result) -> Void] = []
+        
+        var loadCallCount: Int { eventsCompletions.count }
         
         func load(startDate: Date, endDate: Date, completion: @escaping (EventsLoader.Result) -> Void) {
-            completions.append(completion)
+            eventsCompletions.append(completion)
         }
         
         func complete(with events: [Event] = [], at index: Int) {
-            completions[index](.success(events))
+            eventsCompletions[index](.success(events))
         }
         
         func complete(withErrorAt index: Int) {
             let error = NSError(domain: "an error", code: 0)
-            completions[index](.failure(error))
+            eventsCompletions[index](.failure(error))
+        }
+        
+        // MARK: - ImageDataLoader
+        private struct ImageDataLoaderTaskMock: ImageDataLoaderTask {
+            func cancel() {}
+        }
+        
+        private(set) var loadedImageURLs: [URL] = []
+        
+        func loadImageData(from url: URL, completion: @escaping (ImageDataLoader.Result) -> Void) -> ImageDataLoaderTask {
+            loadedImageURLs.append(url)
+            return ImageDataLoaderTaskMock()
         }
     }
 }
@@ -137,6 +172,10 @@ class EventsViewControllerTests: XCTestCase {
 private extension EventsViewController {
     func simulateUserInitiatedRefresh() {
         refreshControl?.simulatePullToRefresh()
+    }
+    
+    func simulateEventImageViewVisible(at index: Int) {
+        _ = eventView(at: index)
     }
     
     var isShowingLoadingIndicator: Bool {

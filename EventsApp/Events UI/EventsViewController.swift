@@ -8,12 +8,14 @@
 import UIKit
 
 public final class EventsViewController: UITableViewController {
-    private var loader: EventsLoader?
+    private var eventsLoader: EventsLoader?
+    private var imageLoader: ImageDataLoader?
     private var tableModel: [Event] = []
     
-    public convenience init(loader: EventsLoader) {
+    public convenience init(eventsLoader: EventsLoader, imageLoader: ImageDataLoader) {
         self.init()
-        self.loader = loader
+        self.eventsLoader = eventsLoader
+        self.imageLoader = imageLoader
     }
     
     override public func viewDidLoad() {
@@ -26,7 +28,7 @@ public final class EventsViewController: UITableViewController {
     
     @objc private func refresh() {
         refreshControl?.beginRefreshing()
-        loader?.load(startDate: Date(), endDate: Date()) { [weak self] result in
+        eventsLoader?.load(startDate: Date(), endDate: Date()) { [weak self] result in
             if let events = try? result.get() {
                 self?.tableModel = events
                 self?.tableView.reloadData()
@@ -46,6 +48,9 @@ public final class EventsViewController: UITableViewController {
         cell.locationLabel.text = cellModel.location
         cell.dateIntervalLabel.text = cellModel.dateInterval
         cell.countLabel.text = "\(cellModel.count) events"
+        if let imageURL = cellModel.imageURL {
+            _ = imageLoader?.loadImageData(from: imageURL) { _ in }
+        }
         return cell
     }
 }
