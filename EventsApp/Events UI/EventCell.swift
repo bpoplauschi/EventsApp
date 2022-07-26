@@ -9,6 +9,7 @@ import UIKit
 
 public final class EventCell: UITableViewCell {
     public let imageContainer = UIView()
+    public let eventImageView = UIImageView()
     public let nameLabel = UILabel()
     public let locationLabel = UILabel()
     public let dateIntervalLabel = UILabel()
