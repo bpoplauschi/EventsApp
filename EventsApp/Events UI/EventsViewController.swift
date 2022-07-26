@@ -7,7 +7,7 @@
 
 import UIKit
 
-public final class EventsViewController: UITableViewController {
+public final class EventsViewController: UITableViewController, UITableViewDataSourcePrefetching {
     private var eventsLoader: EventsLoader?
     private var imageLoader: ImageDataLoader?
     private var tableModel: [Event] = []
@@ -24,6 +24,7 @@ public final class EventsViewController: UITableViewController {
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        tableView.prefetchDataSource = self
         refresh()
     }
     
@@ -64,5 +65,14 @@ public final class EventsViewController: UITableViewController {
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         imageLoadingTasks[indexPath]?.cancel()
         imageLoadingTasks[indexPath] = nil
+    }
+    
+    public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        indexPaths.forEach { indexPath in
+            let cellModel = tableModel[indexPath.row]
+            if let imageURL = cellModel.imageURL {
+                _ = imageLoader?.loadImageData(from: imageURL) { _ in }
+            }
+        }
     }
 }

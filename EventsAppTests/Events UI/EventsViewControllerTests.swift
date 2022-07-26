@@ -157,6 +157,26 @@ class EventsViewControllerTests: XCTestCase {
         XCTAssertEqual(view1?.renderedImage, imageData1, "Expected image for second view once second image loading completes successfully")
     }
     
+    func test_eventImageView_preloadsImageURLWhenNearVisible() {
+        let event0 = Event(name: "name", location: "location", dateInterval: "date interval", count: 1, imageURL: nil)
+        let event1 = Event(name: "name 1", location: "location 1", dateInterval: "date interval 1", count: 1, imageURL: URL(string: "http://image-url1.com")!)
+        let event2 = Event(name: "name 2", location: "location 2", dateInterval: "date interval 2", count: 1, imageURL: URL(string: "http://image-url2.com")!)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.complete(with: [event0, event1, event2], at: 0)
+        XCTAssertEqual(loader.loadedImageURLs, [], "Expected no image URL requests until image is near visible")
+        
+        sut.simulateEventImageViewNearVisible(at: 0)
+        XCTAssertEqual(loader.loadedImageURLs, [], "Expected no image URL requests once first image with nil image url is near visible")
+        
+        sut.simulateEventImageViewNearVisible(at: 1)
+        XCTAssertEqual(loader.loadedImageURLs, [event1.imageURL], "Expected second image URL request once second image is near visible")
+        
+        sut.simulateEventImageViewNearVisible(at: 2)
+        XCTAssertEqual(loader.loadedImageURLs, [event1.imageURL, event2.imageURL], "Expected third image URL request once third image is near visible")
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: EventsViewController, loader: EventsLoaderSpy) {
@@ -258,6 +278,12 @@ private extension EventsViewController {
     @discardableResult
     func simulateEventImageViewVisible(at index: Int) -> EventCell? {
         return eventView(at: index) as? EventCell
+    }
+    
+    func simulateEventImageViewNearVisible(at row: Int) {
+        let dataSource = tableView.prefetchDataSource
+        let index = IndexPath(row: row, section: eventsSection)
+        dataSource?.tableView(tableView, prefetchRowsAt: [index])
     }
     
     func simulateEventImageViewNotVisible(at row: Int) {
