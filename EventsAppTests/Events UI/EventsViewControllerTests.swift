@@ -79,17 +79,36 @@ class EventsViewControllerTests: XCTestCase {
         
         sut.loadViewIfNeeded()
         loader.complete(with: [event0, event1, event2], at: 0)
-        
         XCTAssertEqual(loader.loadedImageURLs, [], "Expected no image URL requests until views become visible")
         
         sut.simulateEventImageViewVisible(at: 0)
         XCTAssertEqual(loader.loadedImageURLs, [], "Expected no image URL requests once first view with nil image url becomes visible")
         
         sut.simulateEventImageViewVisible(at: 1)
-        XCTAssertEqual(loader.loadedImageURLs, [event1.imageURL], "Expected seconds image URL requests once second view also becomes visible")
+        XCTAssertEqual(loader.loadedImageURLs, [event1.imageURL], "Expected second image URL requests once second view also becomes visible")
         
         sut.simulateEventImageViewVisible(at: 2)
         XCTAssertEqual(loader.loadedImageURLs, [event1.imageURL, event2.imageURL], "Expected third image URL requests once third view also becomes visible")
+    }
+    
+    func test_eventImageView_cancelsImageLoadingWhenNotVisibleAnymore() {
+        let event0 = Event(name: "name", location: "location", dateInterval: "date interval", count: 1, imageURL: nil)
+        let event1 = Event(name: "name 1", location: "location 1", dateInterval: "date interval 1", count: 1, imageURL: URL(string: "http://image-url1.com")!)
+        let event2 = Event(name: "name 2", location: "location 2", dateInterval: "date interval 2", count: 1, imageURL: URL(string: "http://image-url2.com")!)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.complete(with: [event0, event1, event2], at: 0)
+        XCTAssertEqual(loader.cancelledImageURLs, [], "Expected no cancelled image URL requests until view is not visible")
+        
+        sut.simulateEventImageViewNotVisible(at: 0)
+        XCTAssertEqual(loader.cancelledImageURLs, [], "Expected no cancelled image URL requests once first view with nil image is not visible anymore")
+        
+        sut.simulateEventImageViewNotVisible(at: 1)
+        XCTAssertEqual(loader.cancelledImageURLs, [event1.imageURL], "Expected cancelled second image URL requests once second view is not visible anymore")
+        
+        sut.simulateEventImageViewNotVisible(at: 2)
+        XCTAssertEqual(loader.cancelledImageURLs, [event1.imageURL, event2.imageURL], "Expected cancelled third image URL requests once third view is not visible anymore")
     }
     
     // MARK: - Helpers
@@ -156,15 +175,21 @@ class EventsViewControllerTests: XCTestCase {
         }
         
         // MARK: - ImageDataLoader
-        private struct ImageDataLoaderTaskMock: ImageDataLoaderTask {
-            func cancel() {}
+        private struct ImageDataLoaderTaskSpy: ImageDataLoaderTask {
+            let cancelCallback: () -> Void
+            func cancel() {
+                cancelCallback()
+            }
         }
         
         private(set) var loadedImageURLs: [URL] = []
+        private(set) var cancelledImageURLs: [URL] = []
         
         func loadImageData(from url: URL, completion: @escaping (ImageDataLoader.Result) -> Void) -> ImageDataLoaderTask {
             loadedImageURLs.append(url)
-            return ImageDataLoaderTaskMock()
+            return ImageDataLoaderTaskSpy { [weak self] in
+                self?.cancelledImageURLs.append(url)
+            }
         }
     }
 }
@@ -174,8 +199,17 @@ private extension EventsViewController {
         refreshControl?.simulatePullToRefresh()
     }
     
-    func simulateEventImageViewVisible(at index: Int) {
-        _ = eventView(at: index)
+    @discardableResult
+    func simulateEventImageViewVisible(at index: Int) -> EventCell? {
+        return eventView(at: index) as? EventCell
+    }
+    
+    func simulateEventImageViewNotVisible(at row: Int) {
+        let view = simulateEventImageViewVisible(at: row)
+        
+        let delegate = tableView.delegate
+        let index = IndexPath(row: row, section: eventsSection)
+        delegate?.tableView?(tableView, didEndDisplaying: view!, forRowAt: index)
     }
     
     var isShowingLoadingIndicator: Bool {

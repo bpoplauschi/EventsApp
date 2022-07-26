@@ -11,6 +11,7 @@ public final class EventsViewController: UITableViewController {
     private var eventsLoader: EventsLoader?
     private var imageLoader: ImageDataLoader?
     private var tableModel: [Event] = []
+    private var imageLoadingTasks: [IndexPath: ImageDataLoaderTask] = [:]
     
     public convenience init(eventsLoader: EventsLoader, imageLoader: ImageDataLoader) {
         self.init()
@@ -49,8 +50,13 @@ public final class EventsViewController: UITableViewController {
         cell.dateIntervalLabel.text = cellModel.dateInterval
         cell.countLabel.text = "\(cellModel.count) events"
         if let imageURL = cellModel.imageURL {
-            _ = imageLoader?.loadImageData(from: imageURL) { _ in }
+            imageLoadingTasks[indexPath] = imageLoader?.loadImageData(from: imageURL) { _ in }
         }
         return cell
+    }
+    
+    public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        imageLoadingTasks[indexPath]?.cancel()
+        imageLoadingTasks[indexPath] = nil
     }
 }
