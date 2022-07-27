@@ -41,7 +41,7 @@ final class EventCellController {
         }
     }
     
-    deinit {
+    func cancelLoad() {
         imageLoadingTask?.cancel()
     }
 }

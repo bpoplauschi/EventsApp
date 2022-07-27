@@ -197,7 +197,7 @@ class EventsViewControllerTests: XCTestCase {
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: EventsViewController, loader: EventsLoaderSpy) {
         let loader = EventsLoaderSpy()
-        let sut = EventsViewController(eventsLoader: loader, imageLoader: loader)
+        let sut = EventsUIComposer.eventsComposedWith(eventsLoader: loader, imageLoader: loader)
         trackForMemoryLeaks(loader)
         trackForMemoryLeaks(sut)
         return (sut, loader)

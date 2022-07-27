@@ -9,27 +9,24 @@ import UIKit
 
 public final class EventsViewController: UITableViewController, UITableViewDataSourcePrefetching {
     private var refreshController: EventsRefreshController?
-    private var imageLoader: ImageDataLoader?
-    private var tableModel: [Event] = [] {
+    
+    var tableModel: [EventCellController] = [] {
         didSet {
             tableView.reloadData()
         }
     }
+    
     private var cellControllers: [IndexPath: EventCellController] = [:]
     
-    public convenience init(eventsLoader: EventsLoader, imageLoader: ImageDataLoader) {
+    convenience init(refreshController: EventsRefreshController) {
         self.init()
-        self.refreshController = EventsRefreshController(eventsLoader: eventsLoader)
-        self.imageLoader = imageLoader
+        self.refreshController = refreshController
     }
     
     override public func viewDidLoad() {
         super.viewDidLoad()
         
         refreshControl = refreshController?.view
-        refreshController?.onRefresh = { [weak self] events in
-            self?.tableModel = events
-        }
         tableView.prefetchDataSource = self
         refreshController?.refresh()
     }
@@ -43,7 +40,7 @@ public final class EventsViewController: UITableViewController, UITableViewDataS
     }
     
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        removeCellController(forRowAt: indexPath)
+        cancelCellControllerLoad(forRowAt: indexPath)
     }
     
     public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
@@ -53,17 +50,14 @@ public final class EventsViewController: UITableViewController, UITableViewDataS
     }
     
     public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
-        indexPaths.forEach(removeCellController)
+        indexPaths.forEach(cancelCellControllerLoad)
     }
     
     private func cellController(forRowAt indexPath: IndexPath) -> EventCellController {
-        let cellModel = tableModel[indexPath.row]
-        let cellController = EventCellController(model: cellModel, imageLoader: imageLoader!)
-        cellControllers[indexPath] = cellController
-        return cellController
+        return tableModel[indexPath.row]
     }
     
-    private func removeCellController(forRowAt indexPath: IndexPath) {
-        cellControllers[indexPath] = nil
+    private func cancelCellControllerLoad(forRowAt indexPath: IndexPath) {
+        cellController(forRowAt: indexPath).cancelLoad()
     }
 }

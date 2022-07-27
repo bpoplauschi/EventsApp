@@ -27,6 +27,7 @@
 		437EAE0A2886FD9200210E09 /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EAE092886FD9200210E09 /* URLSessionHTTPClientTests.swift */; };
 		43BAC341289115FE0049E0C5 /* EventsRefreshController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BAC340289115FE0049E0C5 /* EventsRefreshController.swift */; };
 		43BAC34328911A8B0049E0C5 /* EventCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BAC34228911A8B0049E0C5 /* EventCellController.swift */; };
+		43BAC3462891213D0049E0C5 /* EventsUIComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BAC3452891213D0049E0C5 /* EventsUIComposer.swift */; };
 		43D085302880331600F93724 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0852F2880331600F93724 /* AppDelegate.swift */; };
 		43D085322880331600F93724 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D085312880331600F93724 /* SceneDelegate.swift */; };
 		43D085392880331600F93724 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43D085382880331600F93724 /* Assets.xcassets */; };
@@ -67,6 +68,7 @@
 		437EAE092886FD9200210E09 /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
 		43BAC340289115FE0049E0C5 /* EventsRefreshController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsRefreshController.swift; sourceTree = "<group>"; };
 		43BAC34228911A8B0049E0C5 /* EventCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCellController.swift; sourceTree = "<group>"; };
+		43BAC3452891213D0049E0C5 /* EventsUIComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsUIComposer.swift; sourceTree = "<group>"; };
 		43D0852C2880331600F93724 /* EventsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EventsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43D0852F2880331600F93724 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		43D085312880331600F93724 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 		4331538A288ECB0500D85679 /* Events UI */ = {
 			isa = PBXGroup;
 			children = (
+				43BAC344289121320049E0C5 /* Composers */,
 				43BAC33E289113C60049E0C5 /* Controllers */,
 				43BAC33F289113CF0049E0C5 /* Views */,
 			);
@@ -182,6 +185,14 @@
 				434BE5EB289026850010F73C /* UIView+Shimmering.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		43BAC344289121320049E0C5 /* Composers */ = {
+			isa = PBXGroup;
+			children = (
+				43BAC3452891213D0049E0C5 /* EventsUIComposer.swift */,
+			);
+			path = Composers;
 			sourceTree = "<group>";
 		};
 		43D085232880331600F93724 = {
@@ -352,6 +363,7 @@
 				437EAE022886E6DF00210E09 /* ImageDataLoader.swift in Sources */,
 				437EADF72886E13B00210E09 /* EventsMapper.swift in Sources */,
 				437EADFC2886E1AE00210E09 /* HTTPURLResponse+StatusCode.swift in Sources */,
+				43BAC3462891213D0049E0C5 /* EventsUIComposer.swift in Sources */,
 				43BAC341289115FE0049E0C5 /* EventsRefreshController.swift in Sources */,
 				43D085322880331600F93724 /* SceneDelegate.swift in Sources */,
 				4304688F288993FF0096411E /* URLSessionHTTPClient.swift in Sources */,
