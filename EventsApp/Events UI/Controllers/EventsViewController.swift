@@ -15,7 +15,7 @@ public final class EventsViewController: UITableViewController, UITableViewDataS
             tableView.reloadData()
         }
     }
-    private var imageLoadingTasks: [IndexPath: ImageDataLoaderTask] = [:]
+    private var cellControllers: [IndexPath: EventCellController] = [:]
     
     public convenience init(eventsLoader: EventsLoader, imageLoader: ImageDataLoader) {
         self.init()
@@ -39,45 +39,31 @@ public final class EventsViewController: UITableViewController, UITableViewDataS
     }
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cellModel = tableModel[indexPath.row]
-        let cell = EventCell()
-        cell.nameLabel.text = cellModel.name
-        cell.locationLabel.text = cellModel.location
-        cell.dateIntervalLabel.text = cellModel.dateInterval
-        cell.countLabel.text = "\(cellModel.count) events"
-        cell.eventImageView.image = nil
-        cell.imageContainer.startShimmering()
-        if let imageURL = cellModel.imageURL {
-            imageLoadingTasks[indexPath] = imageLoader?.loadImageData(from: imageURL) { [weak cell] result in
-                let data = try? result.get()
-                cell?.eventImageView.image = data.map(UIImage.init) ?? nil
-                cell?.imageContainer.stopShimmering()
-            }
-        }
-        return cell
+        return cellController(forRowAt: indexPath).view()
     }
     
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cancelImageLoadingTask(forRowAt: indexPath)
+        removeCellController(forRowAt: indexPath)
     }
     
     public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
-            let cellModel = tableModel[indexPath.row]
-            if let imageURL = cellModel.imageURL {
-                imageLoadingTasks[indexPath] = imageLoader?.loadImageData(from: imageURL) { _ in }
-            }
+            cellController(forRowAt: indexPath).preload()
         }
     }
     
     public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
-        indexPaths.forEach { indexPath in
-            cancelImageLoadingTask(forRowAt: indexPath)
-        }
+        indexPaths.forEach(removeCellController)
     }
     
-    private func cancelImageLoadingTask(forRowAt indexPath: IndexPath) {
-        imageLoadingTasks[indexPath]?.cancel()
-        imageLoadingTasks[indexPath] = nil
+    private func cellController(forRowAt indexPath: IndexPath) -> EventCellController {
+        let cellModel = tableModel[indexPath.row]
+        let cellController = EventCellController(model: cellModel, imageLoader: imageLoader!)
+        cellControllers[indexPath] = cellController
+        return cellController
+    }
+    
+    private func removeCellController(forRowAt indexPath: IndexPath) {
+        cellControllers[indexPath] = nil
     }
 }

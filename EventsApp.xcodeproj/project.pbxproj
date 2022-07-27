@@ -26,6 +26,7 @@
 		437EAE082886FCFC00210E09 /* RemoteImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EAE072886FCFC00210E09 /* RemoteImageDataLoader.swift */; };
 		437EAE0A2886FD9200210E09 /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EAE092886FD9200210E09 /* URLSessionHTTPClientTests.swift */; };
 		43BAC341289115FE0049E0C5 /* EventsRefreshController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BAC340289115FE0049E0C5 /* EventsRefreshController.swift */; };
+		43BAC34328911A8B0049E0C5 /* EventCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BAC34228911A8B0049E0C5 /* EventCellController.swift */; };
 		43D085302880331600F93724 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0852F2880331600F93724 /* AppDelegate.swift */; };
 		43D085322880331600F93724 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D085312880331600F93724 /* SceneDelegate.swift */; };
 		43D085392880331600F93724 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43D085382880331600F93724 /* Assets.xcassets */; };
@@ -65,6 +66,7 @@
 		437EAE072886FCFC00210E09 /* RemoteImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageDataLoader.swift; sourceTree = "<group>"; };
 		437EAE092886FD9200210E09 /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
 		43BAC340289115FE0049E0C5 /* EventsRefreshController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsRefreshController.swift; sourceTree = "<group>"; };
+		43BAC34228911A8B0049E0C5 /* EventCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCellController.swift; sourceTree = "<group>"; };
 		43D0852C2880331600F93724 /* EventsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EventsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43D0852F2880331600F93724 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		43D085312880331600F93724 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 			children = (
 				4331538B288ECB1200D85679 /* EventsViewController.swift */,
 				43BAC340289115FE0049E0C5 /* EventsRefreshController.swift */,
+				43BAC34228911A8B0049E0C5 /* EventCellController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -335,6 +338,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43BAC34328911A8B0049E0C5 /* EventCellController.swift in Sources */,
 				43D085302880331600F93724 /* AppDelegate.swift in Sources */,
 				437EADF92886E14C00210E09 /* VividSeatsAPIEvent.swift in Sources */,
 				437EADF32886E0C200210E09 /* HTTPClient.swift in Sources */,
