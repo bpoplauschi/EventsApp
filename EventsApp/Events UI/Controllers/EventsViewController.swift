@@ -8,35 +8,30 @@
 import UIKit
 
 public final class EventsViewController: UITableViewController, UITableViewDataSourcePrefetching {
-    private var eventsLoader: EventsLoader?
+    private var refreshController: EventsRefreshController?
     private var imageLoader: ImageDataLoader?
-    private var tableModel: [Event] = []
+    private var tableModel: [Event] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     private var imageLoadingTasks: [IndexPath: ImageDataLoaderTask] = [:]
     
     public convenience init(eventsLoader: EventsLoader, imageLoader: ImageDataLoader) {
         self.init()
-        self.eventsLoader = eventsLoader
+        self.refreshController = EventsRefreshController(eventsLoader: eventsLoader)
         self.imageLoader = imageLoader
     }
     
     override public func viewDidLoad() {
         super.viewDidLoad()
         
-        refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        tableView.prefetchDataSource = self
-        refresh()
-    }
-    
-    @objc private func refresh() {
-        refreshControl?.beginRefreshing()
-        eventsLoader?.load(startDate: Date(), endDate: Date()) { [weak self] result in
-            if let events = try? result.get() {
-                self?.tableModel = events
-                self?.tableView.reloadData()
-            }
-            self?.refreshControl?.endRefreshing()
+        refreshControl = refreshController?.view
+        refreshController?.onRefresh = { [weak self] events in
+            self?.tableModel = events
         }
+        tableView.prefetchDataSource = self
+        refreshController?.refresh()
     }
     
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
