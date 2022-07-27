@@ -104,19 +104,10 @@
 		4331538A288ECB0500D85679 /* Events UI */ = {
 			isa = PBXGroup;
 			children = (
-				434BE5EA2890267A0010F73C /* Helpers */,
-				4331538B288ECB1200D85679 /* EventsViewController.swift */,
-				4331538D288EFFB100D85679 /* EventCell.swift */,
+				43BAC33E289113C60049E0C5 /* Controllers */,
+				43BAC33F289113CF0049E0C5 /* Views */,
 			);
 			path = "Events UI";
-			sourceTree = "<group>";
-		};
-		434BE5EA2890267A0010F73C /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-				434BE5EB289026850010F73C /* UIView+Shimmering.swift */,
-			);
-			path = Helpers;
 			sourceTree = "<group>";
 		};
 		4371C33C28859717005A1275 /* Helpers */ = {
@@ -168,6 +159,23 @@
 				430468902889945F0096411E /* URLProtocolStub.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		43BAC33E289113C60049E0C5 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				4331538B288ECB1200D85679 /* EventsViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		43BAC33F289113CF0049E0C5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4331538D288EFFB100D85679 /* EventCell.swift */,
+				434BE5EB289026850010F73C /* UIView+Shimmering.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		43D085232880331600F93724 = {
