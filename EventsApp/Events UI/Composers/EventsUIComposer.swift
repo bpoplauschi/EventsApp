@@ -12,13 +12,12 @@ public final class EventsUIComposer {
     private init() {}
     
     public static func eventsComposedWith(eventsLoader: EventsLoader, imageLoader: ImageDataLoader) -> EventsViewController {
-        let refreshController = EventsRefreshController(eventsLoader: eventsLoader)
-        
         let bundle = Bundle(for: EventsViewController.self)
         let storyboard = UIStoryboard(name: "Events", bundle: bundle)
         let eventsController = storyboard.instantiateInitialViewController() as! EventsViewController
+        let refreshController = eventsController.refreshController!
         
-        eventsController.refreshController = refreshController
+        refreshController.eventsLoader = eventsLoader
         refreshController.onRefresh = adaptEventsToCellControllers(forwardingTo: eventsController, imageLoader: imageLoader)
         
         return eventsController

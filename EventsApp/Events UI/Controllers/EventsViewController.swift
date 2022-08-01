@@ -8,7 +8,7 @@
 import UIKit
 
 public final class EventsViewController: UITableViewController, UITableViewDataSourcePrefetching {
-    var refreshController: EventsRefreshController?
+    @IBOutlet var refreshController: EventsRefreshController?
     
     var tableModel: [EventCellController] = [] {
         didSet {
@@ -21,7 +21,6 @@ public final class EventsViewController: UITableViewController, UITableViewDataS
     override public func viewDidLoad() {
         super.viewDidLoad()
         
-        refreshControl = refreshController?.view
         tableView.prefetchDataSource = self
         refreshController?.refresh()
     }
