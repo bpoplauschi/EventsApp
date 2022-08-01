@@ -19,7 +19,7 @@ final class EventCellController {
     }
     
     func view(in tableView: UITableView) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell") as! EventCell
+        let cell: EventCell = tableView.dequeueReusableCell()
         cell.nameLabel.text = model.name
         cell.locationLabel.text = model.location
         cell.dateIntervalLabel.text = model.dateInterval

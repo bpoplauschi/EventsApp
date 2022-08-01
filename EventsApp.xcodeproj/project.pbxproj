@@ -25,6 +25,7 @@
 		437EAE062886E83C00210E09 /* TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EAE052886E83C00210E09 /* TestHelpers.swift */; };
 		437EAE082886FCFC00210E09 /* RemoteImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EAE072886FCFC00210E09 /* RemoteImageDataLoader.swift */; };
 		437EAE0A2886FD9200210E09 /* URLSessionHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437EAE092886FD9200210E09 /* URLSessionHTTPClientTests.swift */; };
+		43B88ECA2898121700B05621 /* UITableView+Dequeueing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B88EC92898121700B05621 /* UITableView+Dequeueing.swift */; };
 		43BAC341289115FE0049E0C5 /* EventsRefreshController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BAC340289115FE0049E0C5 /* EventsRefreshController.swift */; };
 		43BAC34328911A8B0049E0C5 /* EventCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BAC34228911A8B0049E0C5 /* EventCellController.swift */; };
 		43BAC3462891213D0049E0C5 /* EventsUIComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BAC3452891213D0049E0C5 /* EventsUIComposer.swift */; };
@@ -67,6 +68,7 @@
 		437EAE052886E83C00210E09 /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 		437EAE072886FCFC00210E09 /* RemoteImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageDataLoader.swift; sourceTree = "<group>"; };
 		437EAE092886FD9200210E09 /* URLSessionHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHTTPClientTests.swift; sourceTree = "<group>"; };
+		43B88EC92898121700B05621 /* UITableView+Dequeueing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Dequeueing.swift"; sourceTree = "<group>"; };
 		43BAC340289115FE0049E0C5 /* EventsRefreshController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsRefreshController.swift; sourceTree = "<group>"; };
 		43BAC34228911A8B0049E0C5 /* EventCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCellController.swift; sourceTree = "<group>"; };
 		43BAC3452891213D0049E0C5 /* EventsUIComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsUIComposer.swift; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 				4331538D288EFFB100D85679 /* EventCell.swift */,
 				434BE5EB289026850010F73C /* UIView+Shimmering.swift */,
 				43BAC3472891614D0049E0C5 /* Events.storyboard */,
+				43B88EC92898121700B05621 /* UITableView+Dequeueing.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -353,6 +356,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43B88ECA2898121700B05621 /* UITableView+Dequeueing.swift in Sources */,
 				43BAC34328911A8B0049E0C5 /* EventCellController.swift in Sources */,
 				43D085302880331600F93724 /* AppDelegate.swift in Sources */,
 				437EADF92886E14C00210E09 /* VividSeatsAPIEvent.swift in Sources */,
