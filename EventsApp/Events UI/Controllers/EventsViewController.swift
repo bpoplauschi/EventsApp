@@ -21,7 +21,6 @@ public final class EventsViewController: UITableViewController, UITableViewDataS
     override public func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.prefetchDataSource = self
         refreshController?.refresh()
     }
     

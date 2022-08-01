@@ -120,6 +120,7 @@
                         <connections>
                             <outlet property="dataSource" destination="kGR-Oo-Wey" id="NFU-Cs-eA3"/>
                             <outlet property="delegate" destination="kGR-Oo-Wey" id="epT-n3-Jdx"/>
+                            <outlet property="prefetchDataSource" destination="kGR-Oo-Wey" id="1py-Ra-iMm"/>
                         </connections>
                     </tableView>
                     <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="z2q-gF-VaT">
