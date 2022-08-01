@@ -115,6 +115,14 @@
                                         <constraint firstItem="UAm-uY-200" firstAttribute="top" secondItem="0LX-5W-gsX" secondAttribute="topMargin" priority="999" id="fvx-ZW-a5a"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="countLabel" destination="Sfx-xe-xse" id="yZa-4H-5nm"/>
+                                    <outlet property="dateIntervalLabel" destination="NHd-xY-alA" id="cq6-FE-94O"/>
+                                    <outlet property="eventImageView" destination="uEU-IC-vB2" id="65D-iY-2vv"/>
+                                    <outlet property="imageContainer" destination="QU4-hM-wGw" id="ljb-6P-wkM"/>
+                                    <outlet property="locationLabel" destination="UNr-A6-NZC" id="Xpw-Sc-qB8"/>
+                                    <outlet property="nameLabel" destination="OrO-da-0no" id="klG-Ig-FwK"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>

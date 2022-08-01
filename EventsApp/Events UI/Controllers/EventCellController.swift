@@ -11,25 +11,27 @@ final class EventCellController {
     private let model: Event
     private let imageLoader: ImageDataLoader
     private var imageLoadingTask: ImageDataLoaderTask?
+    private var cell: EventCell?
     
     init(model: Event, imageLoader: ImageDataLoader) {
         self.model = model
         self.imageLoader = imageLoader
     }
     
-    func view() -> UITableViewCell {
-        let cell = EventCell()
+    func view(in tableView: UITableView) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell") as! EventCell
         cell.nameLabel.text = model.name
         cell.locationLabel.text = model.location
         cell.dateIntervalLabel.text = model.dateInterval
         cell.countLabel.text = "\(model.count) events"
         cell.eventImageView.image = nil
         cell.imageContainer.startShimmering()
+        self.cell = cell
         if let imageURL = model.imageURL {
-            self.imageLoadingTask = imageLoader.loadImageData(from: imageURL) { [weak cell] result in
+            imageLoadingTask = imageLoader.loadImageData(from: imageURL) { [weak self] result in
                 let data = try? result.get()
-                cell?.eventImageView.image = data.map(UIImage.init) ?? nil
-                cell?.imageContainer.stopShimmering()
+                self?.cell?.eventImageView.image = data.map(UIImage.init) ?? nil
+                self?.cell?.imageContainer.stopShimmering()
             }
         }
         return cell
@@ -43,5 +45,10 @@ final class EventCellController {
     
     func cancelLoad() {
         imageLoadingTask?.cancel()
+        releaseCellForReuse()
+    }
+    
+    private func releaseCellForReuse() {
+        cell = nil
     }
 }

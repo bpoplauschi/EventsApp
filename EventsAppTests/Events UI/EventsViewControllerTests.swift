@@ -193,6 +193,18 @@ class EventsViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.cancelledImageURLs, [event0.imageURL, event1.imageURL], "Expected second cancelled image URL request once second image is not near visible anymore")
     }
     
+    func test_eventImageView_doesNotRenderLoadedImageWhenNotVisibleAnymore() {
+        let event0 = Event(name: "name 1", location: "location 1", dateInterval: "date interval 1", count: 1, imageURL: URL(string: "http://image-url1.com")!)
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.complete(with: [event0], at: 0)
+        
+        let view = sut.simulateEventImageViewNotVisible(at: 0)
+        loader.completeImageLoading(with: anyImageData(), at: 0)
+        
+        XCTAssertNil(view?.renderedImage, "Expected no rendered image when an image load finishes after the view is not visible anymore")
+    }
+    
     // MARK: - Helpers
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: EventsViewController, loader: EventsLoaderSpy) {
@@ -201,6 +213,10 @@ class EventsViewControllerTests: XCTestCase {
         trackForMemoryLeaks(loader)
         trackForMemoryLeaks(sut)
         return (sut, loader)
+    }
+    
+    private func anyImageData() -> Data {
+        UIImage.make(withColor: .red).pngData()!
     }
     
     private func assertThat(
@@ -302,12 +318,14 @@ private extension EventsViewController {
         dataSource?.tableView(tableView, prefetchRowsAt: [index])
     }
     
-    func simulateEventImageViewNotVisible(at row: Int) {
+    @discardableResult
+    func simulateEventImageViewNotVisible(at row: Int) -> EventCell? {
         let view = simulateEventImageViewVisible(at: row)
         
         let delegate = tableView.delegate
         let index = IndexPath(row: row, section: eventsSection)
         delegate?.tableView?(tableView, didEndDisplaying: view!, forRowAt: index)
+        return view
     }
     
     func simulateEventImageViewNotNearVisible(at row: Int) {

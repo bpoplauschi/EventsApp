@@ -8,10 +8,10 @@
 import UIKit
 
 public final class EventCell: UITableViewCell {
-    public let imageContainer = UIView()
-    public let eventImageView = UIImageView()
-    public let nameLabel = UILabel()
-    public let locationLabel = UILabel()
-    public let dateIntervalLabel = UILabel()
-    public let countLabel = UILabel()
+    @IBOutlet private(set) public var imageContainer: UIView!
+    @IBOutlet private(set) public var eventImageView: UIImageView!
+    @IBOutlet private(set) public var nameLabel: UILabel!
+    @IBOutlet private(set) public var locationLabel: UILabel!
+    @IBOutlet private(set) public var dateIntervalLabel: UILabel!
+    @IBOutlet private(set) public var countLabel: UILabel!
 }
