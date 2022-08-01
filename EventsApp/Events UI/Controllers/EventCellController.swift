@@ -30,7 +30,7 @@ final class EventCellController {
         if let imageURL = model.imageURL {
             imageLoadingTask = imageLoader.loadImageData(from: imageURL) { [weak self] result in
                 let data = try? result.get()
-                self?.cell?.eventImageView.image = data.map(UIImage.init) ?? nil
+                self?.cell?.eventImageView.setImageAnimated(data.map(UIImage.init) ?? nil)
                 self?.cell?.imageContainer.stopShimmering()
             }
         }
