@@ -154,6 +154,7 @@ class URLSessionHTTPClientPOSTTests: XCTestCase {
             XCTAssertEqual(request.url, url)
             XCTAssertEqual(request.httpMethod, "POST")
             XCTAssertEqual(request.httpBodyData, bodyData)
+            XCTAssertEqual(request.allHTTPHeaderFields?["Content-Type"], "application/json")
             exp.fulfill()
         }
         

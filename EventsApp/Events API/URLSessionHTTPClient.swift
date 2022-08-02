@@ -36,6 +36,7 @@ public final class URLSessionHTTPClient: HTTPClient {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = body
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         return createDataTask(from: request, completion: completion)
     }
     
