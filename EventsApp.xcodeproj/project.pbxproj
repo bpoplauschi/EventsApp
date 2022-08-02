@@ -40,6 +40,7 @@
 		43D0856728804D7D00F93724 /* VividSeatsAPIEventsLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0856628804D7D00F93724 /* VividSeatsAPIEventsLoaderTests.swift */; };
 		43F1F68A28991CC100CF3DAF /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1F68928991CC100CF3DAF /* GradientView.swift */; };
 		43F1F68D289950C900CF3DAF /* MainQueueDispatchDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1F68C289950C900CF3DAF /* MainQueueDispatchDecorator.swift */; };
+		43F1F690289957F700CF3DAF /* EventsLoaderSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1F68F289957F700CF3DAF /* EventsLoaderSpy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +90,7 @@
 		43D0856628804D7D00F93724 /* VividSeatsAPIEventsLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VividSeatsAPIEventsLoaderTests.swift; sourceTree = "<group>"; };
 		43F1F68928991CC100CF3DAF /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		43F1F68C289950C900CF3DAF /* MainQueueDispatchDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainQueueDispatchDecorator.swift; sourceTree = "<group>"; };
+		43F1F68F289957F700CF3DAF /* EventsLoaderSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsLoaderSpy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +114,7 @@
 		4311D83B288C51D700FD4D69 /* Events UI */ = {
 			isa = PBXGroup;
 			children = (
+				43F1F68E289957EF00CF3DAF /* Helpers */,
 				4311D83C288C52D100FD4D69 /* EventsViewControllerTests.swift */,
 			);
 			path = "Events UI";
@@ -271,6 +274,14 @@
 			path = Main;
 			sourceTree = "<group>";
 		};
+		43F1F68E289957EF00CF3DAF /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				43F1F68F289957F700CF3DAF /* EventsLoaderSpy.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -405,6 +416,7 @@
 				437EAE042886E78900210E09 /* RemoteImageDataLoaderTests.swift in Sources */,
 				4311D83D288C52D100FD4D69 /* EventsViewControllerTests.swift in Sources */,
 				430468912889945F0096411E /* URLProtocolStub.swift in Sources */,
+				43F1F690289957F700CF3DAF /* EventsLoaderSpy.swift in Sources */,
 				437EAE0A2886FD9200210E09 /* URLSessionHTTPClientTests.swift in Sources */,
 				437EAE062886E83C00210E09 /* TestHelpers.swift in Sources */,
 				43D0856728804D7D00F93724 /* VividSeatsAPIEventsLoaderTests.swift in Sources */,
