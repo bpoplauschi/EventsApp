@@ -39,6 +39,7 @@
 		43D085652880495900F93724 /* EventsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D085642880495900F93724 /* EventsLoader.swift */; };
 		43D0856728804D7D00F93724 /* VividSeatsAPIEventsLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0856628804D7D00F93724 /* VividSeatsAPIEventsLoaderTests.swift */; };
 		43F1F68A28991CC100CF3DAF /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1F68928991CC100CF3DAF /* GradientView.swift */; };
+		43F1F68D289950C900CF3DAF /* MainQueueDispatchDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1F68C289950C900CF3DAF /* MainQueueDispatchDecorator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +88,7 @@
 		43D085642880495900F93724 /* EventsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsLoader.swift; sourceTree = "<group>"; };
 		43D0856628804D7D00F93724 /* VividSeatsAPIEventsLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VividSeatsAPIEventsLoaderTests.swift; sourceTree = "<group>"; };
 		43F1F68928991CC100CF3DAF /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
+		43F1F68C289950C900CF3DAF /* MainQueueDispatchDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainQueueDispatchDecorator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,7 +120,6 @@
 		4331538A288ECB0500D85679 /* Events UI */ = {
 			isa = PBXGroup;
 			children = (
-				43BAC344289121320049E0C5 /* Composers */,
 				43BAC33E289113C60049E0C5 /* Controllers */,
 				43BAC33F289113CF0049E0C5 /* Views */,
 			);
@@ -203,6 +204,7 @@
 			isa = PBXGroup;
 			children = (
 				43BAC3452891213D0049E0C5 /* EventsUIComposer.swift */,
+				43F1F68C289950C900CF3DAF /* MainQueueDispatchDecorator.swift */,
 			);
 			path = Composers;
 			sourceTree = "<group>";
@@ -228,11 +230,10 @@
 		43D0852E2880331600F93724 /* EventsApp */ = {
 			isa = PBXGroup;
 			children = (
+				43F1F68B28994FDF00CF3DAF /* Main */,
 				437EADF12886E0B900210E09 /* Events API */,
 				43D08561288047BF00F93724 /* Events Feature */,
 				4331538A288ECB0500D85679 /* Events UI */,
-				43D0852F2880331600F93724 /* AppDelegate.swift */,
-				43D085312880331600F93724 /* SceneDelegate.swift */,
 				43D085382880331600F93724 /* Assets.xcassets */,
 				43D0853A2880331600F93724 /* LaunchScreen.storyboard */,
 				43D0853D2880331600F93724 /* Info.plist */,
@@ -258,6 +259,16 @@
 				437EAE012886E6DF00210E09 /* ImageDataLoader.swift */,
 			);
 			path = "Events Feature";
+			sourceTree = "<group>";
+		};
+		43F1F68B28994FDF00CF3DAF /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				43BAC344289121320049E0C5 /* Composers */,
+				43D0852F2880331600F93724 /* AppDelegate.swift */,
+				43D085312880331600F93724 /* SceneDelegate.swift */,
+			);
+			path = Main;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -362,6 +373,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43F1F68D289950C900CF3DAF /* MainQueueDispatchDecorator.swift in Sources */,
 				43B88ECA2898121700B05621 /* UITableView+Dequeueing.swift in Sources */,
 				43BAC34328911A8B0049E0C5 /* EventCellController.swift in Sources */,
 				43D085302880331600F93724 /* AppDelegate.swift in Sources */,
