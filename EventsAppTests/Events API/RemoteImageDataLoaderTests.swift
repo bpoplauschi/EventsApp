@@ -12,30 +12,26 @@ class RemoteImageDataLoaderTests: XCTestCase {
     func test_init_doesNotPerformAnyURLRequest() {
         let (_, httpClient) = makeSUT()
         
-        XCTAssertTrue(httpClient.requestedURLs.isEmpty)
-        XCTAssertTrue(httpClient.requestedMethods.isEmpty)
+        XCTAssertTrue(httpClient.messages.isEmpty)
     }
     
-    func test_loadImageDataFromURL_requestsDataFromURL() {
+    func test_loadImageDataFromURL_requestsDataFromURL() throws {
         let url = URL(string: "https://a-concrete-url.com")!
         let (sut, httpClient) = makeSUT()
         
         _ = sut.loadImageData(from: url) { _ in }
         
-        XCTAssertEqual(httpClient.requestedURLs, [url])
-        XCTAssertEqual(httpClient.requestedMethods, ["GET"])
-        XCTAssertTrue(httpClient.requestedBodies.isEmpty)
+        try assertThat(httpClient: httpClient, receivedOneMessageWithURL: url, method: "GET", body: nil)
     }
     
-    func test_loadImageDataFromURLTwice_requestsDataFromURLTwice() {
+    func test_loadImageDataFromURLTwice_requestsDataFromURLTwice() throws {
         let url = URL(string: "https://a-concrete-url.com")!
         let (sut, httpClient) = makeSUT()
         
         _ = sut.loadImageData(from: url) { _ in }
         _ = sut.loadImageData(from: url) { _ in }
         
-        XCTAssertEqual(httpClient.requestedURLs, [url, url])
-        XCTAssertEqual(httpClient.requestedMethods, ["GET", "GET"])
+        try assertThat(httpClient: httpClient, receivedTwoMessagesWithURL: url, method: "GET")
     }
     
     func test_loadImageDataFromURL_deliversConnectivityErrorOnClientError() {

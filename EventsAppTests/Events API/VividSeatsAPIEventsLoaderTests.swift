@@ -12,8 +12,7 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
     func test_init_doesNotRequestData() {
         let (_, httpClient) = makeSUT()
         
-        XCTAssertTrue(httpClient.requestedURLs.isEmpty)
-        XCTAssertTrue(httpClient.requestedMethods.isEmpty)
+        XCTAssertTrue(httpClient.messages.isEmpty)
     }
     
     func test_load_requestsData() throws {
@@ -22,25 +21,21 @@ class VividSeatsAPIEventsLoaderTests: XCTestCase {
         
         sut.load(startDate: startDate, endDate: endDate) { _ in }
         
-        XCTAssertEqual(httpClient.requestedURLs, [url])
-        XCTAssertEqual(httpClient.requestedMethods, ["POST"])
-        XCTAssertEqual(httpClient.requestedBodies.count, 1)
-        let bodyData = try XCTUnwrap(httpClient.requestedBodies.first)
-        let body = try JSONDecoder().decode([String: String].self, from: bodyData)
-        XCTAssertEqual(body["startDate"], startDateString)
-        XCTAssertEqual(body["endDate"], endDateString)
-        XCTAssertEqual(body["includeSuggested"], "true")
+        try assertThat(httpClient: httpClient, receivedOneMessageWithURL: url, method: "POST", body: [
+            "startDate": startDateString,
+            "endDate": endDateString,
+            "includeSuggested": "true"
+        ])
     }
     
-    func test_loadTwice_requestsDataTwice() {
+    func test_loadTwice_requestsDataTwice() throws {
         let url = URL(string: "https://a-concrete-url.com")!
         let (sut, httpClient) = makeSUT(url: url)
 
         sut.load(startDate: startDate, endDate: endDate) { _ in }
         sut.load(startDate: startDate, endDate: endDate) { _ in }
-
-        XCTAssertEqual(httpClient.requestedURLs, [url, url])
-        XCTAssertEqual(httpClient.requestedMethods, ["POST", "POST"])
+        
+        try assertThat(httpClient: httpClient, receivedTwoMessagesWithURL: url, method: "POST")
     }
     
     func test_load_deliversErrorOnClientError() {
