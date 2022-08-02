@@ -41,6 +41,7 @@
 		43F1F68A28991CC100CF3DAF /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1F68928991CC100CF3DAF /* GradientView.swift */; };
 		43F1F68D289950C900CF3DAF /* MainQueueDispatchDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1F68C289950C900CF3DAF /* MainQueueDispatchDecorator.swift */; };
 		43F1F690289957F700CF3DAF /* EventsLoaderSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1F68F289957F700CF3DAF /* EventsLoaderSpy.swift */; };
+		43F1F692289959BE00CF3DAF /* EventsViewController+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1F691289959BE00CF3DAF /* EventsViewController+TestHelpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +92,7 @@
 		43F1F68928991CC100CF3DAF /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		43F1F68C289950C900CF3DAF /* MainQueueDispatchDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainQueueDispatchDecorator.swift; sourceTree = "<group>"; };
 		43F1F68F289957F700CF3DAF /* EventsLoaderSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsLoaderSpy.swift; sourceTree = "<group>"; };
+		43F1F691289959BE00CF3DAF /* EventsViewController+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventsViewController+TestHelpers.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -278,6 +280,7 @@
 			isa = PBXGroup;
 			children = (
 				43F1F68F289957F700CF3DAF /* EventsLoaderSpy.swift */,
+				43F1F691289959BE00CF3DAF /* EventsViewController+TestHelpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -420,6 +423,7 @@
 				437EAE0A2886FD9200210E09 /* URLSessionHTTPClientTests.swift in Sources */,
 				437EAE062886E83C00210E09 /* TestHelpers.swift in Sources */,
 				43D0856728804D7D00F93724 /* VividSeatsAPIEventsLoaderTests.swift in Sources */,
+				43F1F692289959BE00CF3DAF /* EventsViewController+TestHelpers.swift in Sources */,
 				437EAE002886E23A00210E09 /* HTTPClientSpy.swift in Sources */,
 				4371C33E28859728005A1275 /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 			);
