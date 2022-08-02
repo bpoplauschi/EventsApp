@@ -41,8 +41,8 @@ class EventsViewControllerTests: XCTestCase {
     }
     
     func test_loadEventsCompletion_rendersSuccessfullyLoadedEvents() throws {
-        let event0 = Event(name: "a name", location: "a location", dateInterval: "a date interval", count: 1, imageURL: URL(string: "http://a-specific-url.com")!)
-        let event1 = Event(name: "another name", location: "another location", dateInterval: "another date interval", count: 0, imageURL: nil)
+        let event0 = makeEvent(imageURL: anyURL())
+        let event1 = makeEvent(suffix: "another", count: 0)
         let event2 = Event(name: "a name", location: "", dateInterval: "", count: 1, imageURL: URL(string: "http://another-specific-url.com")!)
         let event3 = Event(name: "", location: "", dateInterval: "", count: 0, imageURL: nil)
         let (sut, loader) = makeSUT()
@@ -59,7 +59,7 @@ class EventsViewControllerTests: XCTestCase {
     }
     
     func test_loadEventsCompletion_doesNotAlterCurrentRenderingStateOnError() {
-        let event0 = Event(name: "a name", location: "a location", dateInterval: "a date interval", count: 1, imageURL: URL(string: "http://a-specific-url.com")!)
+        let event0 = makeEvent(imageURL: anyURL())
         let (sut, loader) = makeSUT()
         
         sut.loadViewIfNeeded()
@@ -72,9 +72,9 @@ class EventsViewControllerTests: XCTestCase {
     }
     
     func test_eventImageView_loadsImageURLWhenVisible() {
-        let event0 = Event(name: "name", location: "location", dateInterval: "date interval", count: 1, imageURL: nil)
-        let event1 = Event(name: "name 1", location: "location 1", dateInterval: "date interval 1", count: 1, imageURL: URL(string: "http://image-url1.com")!)
-        let event2 = Event(name: "name 2", location: "location 2", dateInterval: "date interval 2", count: 1, imageURL: URL(string: "http://image-url2.com")!)
+        let event0 = makeEvent()
+        let event1 = makeEvent(suffix: "1", count: 1, imageURL: URL(string: "http://image-url1.com")!)
+        let event2 = makeEvent(suffix: "2", count: 1, imageURL: URL(string: "http://image-url2.com")!)
         let (sut, loader) = makeSUT()
         
         sut.loadViewIfNeeded()
@@ -92,9 +92,9 @@ class EventsViewControllerTests: XCTestCase {
     }
     
     func test_eventImageView_cancelsImageLoadingWhenNotVisibleAnymore() {
-        let event0 = Event(name: "name", location: "location", dateInterval: "date interval", count: 1, imageURL: nil)
-        let event1 = Event(name: "name 1", location: "location 1", dateInterval: "date interval 1", count: 1, imageURL: URL(string: "http://image-url1.com")!)
-        let event2 = Event(name: "name 2", location: "location 2", dateInterval: "date interval 2", count: 1, imageURL: URL(string: "http://image-url2.com")!)
+        let event0 = makeEvent()
+        let event1 = makeEvent(suffix: "1", count: 1, imageURL: URL(string: "http://image-url1.com")!)
+        let event2 = makeEvent(suffix: "2", count: 1, imageURL: URL(string: "http://image-url2.com")!)
         let (sut, loader) = makeSUT()
         
         sut.loadViewIfNeeded()
@@ -112,8 +112,8 @@ class EventsViewControllerTests: XCTestCase {
     }
     
     func test_eventImageViewLoadingIndicator_isVisibleWhenLoadingImage() {
-        let event0 = Event(name: "name 1", location: "location 1", dateInterval: "date interval 1", count: 1, imageURL: URL(string: "http://image-url1.com")!)
-        let event1 = Event(name: "name 2", location: "location 2", dateInterval: "date interval 2", count: 1, imageURL: URL(string: "http://image-url2.com")!)
+        let event0 = makeEvent(suffix: "1", count: 1, imageURL: URL(string: "http://image-url1.com")!)
+        let event1 = makeEvent(suffix: "2", count: 1, imageURL: URL(string: "http://image-url2.com")!)
         let (sut, loader) = makeSUT()
         
         sut.loadViewIfNeeded()
@@ -134,8 +134,8 @@ class EventsViewControllerTests: XCTestCase {
     }
     
     func test_eventImageView_rendersImageLoadedFromURL() {
-        let event0 = Event(name: "name 1", location: "location 1", dateInterval: "date interval 1", count: 1, imageURL: URL(string: "http://image-url1.com")!)
-        let event1 = Event(name: "name 2", location: "location 2", dateInterval: "date interval 2", count: 1, imageURL: URL(string: "http://image-url2.com")!)
+        let event0 = makeEvent(suffix: "1", count: 1, imageURL: URL(string: "http://image-url1.com")!)
+        let event1 = makeEvent(suffix: "2", count: 1, imageURL: URL(string: "http://image-url2.com")!)
         let (sut, loader) = makeSUT()
         
         sut.loadViewIfNeeded()
@@ -158,9 +158,9 @@ class EventsViewControllerTests: XCTestCase {
     }
     
     func test_eventImageView_preloadsImageURLWhenNearVisible() {
-        let event0 = Event(name: "name", location: "location", dateInterval: "date interval", count: 1, imageURL: nil)
-        let event1 = Event(name: "name 1", location: "location 1", dateInterval: "date interval 1", count: 1, imageURL: URL(string: "http://image-url1.com")!)
-        let event2 = Event(name: "name 2", location: "location 2", dateInterval: "date interval 2", count: 1, imageURL: URL(string: "http://image-url2.com")!)
+        let event0 = makeEvent()
+        let event1 = makeEvent(suffix: "1", count: 1, imageURL: URL(string: "http://image-url1.com")!)
+        let event2 = makeEvent(suffix: "2", count: 1, imageURL: URL(string: "http://image-url2.com")!)
         let (sut, loader) = makeSUT()
         
         sut.loadViewIfNeeded()
@@ -178,8 +178,8 @@ class EventsViewControllerTests: XCTestCase {
     }
     
     func test_eventImageView_cancelsImageURLPreloadingWhenNotNearVisibleAnymore() {
-        let event0 = Event(name: "name 1", location: "location 1", dateInterval: "date interval 1", count: 1, imageURL: URL(string: "http://image-url1.com")!)
-        let event1 = Event(name: "name 2", location: "location 2", dateInterval: "date interval 2", count: 1, imageURL: URL(string: "http://image-url2.com")!)
+        let event0 = makeEvent(suffix: "1", count: 1, imageURL: URL(string: "http://image-url1.com")!)
+        let event1 = makeEvent(suffix: "2", count: 1, imageURL: URL(string: "http://image-url2.com")!)
         let (sut, loader) = makeSUT()
         
         sut.loadViewIfNeeded()
@@ -194,7 +194,7 @@ class EventsViewControllerTests: XCTestCase {
     }
     
     func test_eventImageView_doesNotRenderLoadedImageWhenNotVisibleAnymore() {
-        let event0 = Event(name: "name 1", location: "location 1", dateInterval: "date interval 1", count: 1, imageURL: URL(string: "http://image-url1.com")!)
+        let event0 = makeEvent(suffix: "1", count: 1, imageURL: URL(string: "http://image-url1.com")!)
         let (sut, loader) = makeSUT()
         sut.loadViewIfNeeded()
         loader.complete(with: [event0], at: 0)
@@ -217,6 +217,15 @@ class EventsViewControllerTests: XCTestCase {
     
     private func anyImageData() -> Data {
         UIImage.make(withColor: .red).pngData()!
+    }
+    
+    private func makeEvent(suffix: String = "", count: Int = 1, imageURL: URL? = nil) -> Event {
+        Event(
+            name: "name\(suffix)",
+            location: "location\(suffix)",
+            dateInterval: "date interval\(suffix)",
+            count: 1,
+            imageURL: imageURL)
     }
     
     private func assertThat(
