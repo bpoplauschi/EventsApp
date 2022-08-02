@@ -38,6 +38,7 @@
 		43D085632880481800F93724 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D085622880481800F93724 /* Event.swift */; };
 		43D085652880495900F93724 /* EventsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D085642880495900F93724 /* EventsLoader.swift */; };
 		43D0856728804D7D00F93724 /* VividSeatsAPIEventsLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D0856628804D7D00F93724 /* VividSeatsAPIEventsLoaderTests.swift */; };
+		43F1F68A28991CC100CF3DAF /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1F68928991CC100CF3DAF /* GradientView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +86,7 @@
 		43D085622880481800F93724 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		43D085642880495900F93724 /* EventsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsLoader.swift; sourceTree = "<group>"; };
 		43D0856628804D7D00F93724 /* VividSeatsAPIEventsLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VividSeatsAPIEventsLoaderTests.swift; sourceTree = "<group>"; };
+		43F1F68928991CC100CF3DAF /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -192,6 +194,7 @@
 				43BAC3472891614D0049E0C5 /* Events.storyboard */,
 				43B88EC92898121700B05621 /* UITableView+Dequeueing.swift */,
 				43B88ECB2898135800B05621 /* UIImageView+Animations.swift */,
+				43F1F68928991CC100CF3DAF /* GradientView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -370,6 +373,7 @@
 				434BE5EC289026850010F73C /* UIView+Shimmering.swift in Sources */,
 				4331538E288EFFB100D85679 /* EventCell.swift in Sources */,
 				437EADF52886E10000210E09 /* VividSeatsAPIEventsLoader.swift in Sources */,
+				43F1F68A28991CC100CF3DAF /* GradientView.swift in Sources */,
 				4331538C288ECB1200D85679 /* EventsViewController.swift in Sources */,
 				437EAE022886E6DF00210E09 /* ImageDataLoader.swift in Sources */,
 				43B88ECC2898135800B05621 /* UIImageView+Animations.swift in Sources */,
