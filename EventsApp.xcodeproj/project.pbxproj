@@ -42,6 +42,7 @@
 		43F1F68D289950C900CF3DAF /* MainQueueDispatchDecorator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1F68C289950C900CF3DAF /* MainQueueDispatchDecorator.swift */; };
 		43F1F690289957F700CF3DAF /* EventsLoaderSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1F68F289957F700CF3DAF /* EventsLoaderSpy.swift */; };
 		43F1F692289959BE00CF3DAF /* EventsViewController+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1F691289959BE00CF3DAF /* EventsViewController+TestHelpers.swift */; };
+		43F1F69428995A2C00CF3DAF /* EventCell+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F1F69328995A2C00CF3DAF /* EventCell+TestHelpers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +94,7 @@
 		43F1F68C289950C900CF3DAF /* MainQueueDispatchDecorator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainQueueDispatchDecorator.swift; sourceTree = "<group>"; };
 		43F1F68F289957F700CF3DAF /* EventsLoaderSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsLoaderSpy.swift; sourceTree = "<group>"; };
 		43F1F691289959BE00CF3DAF /* EventsViewController+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventsViewController+TestHelpers.swift"; sourceTree = "<group>"; };
+		43F1F69328995A2C00CF3DAF /* EventCell+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventCell+TestHelpers.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -281,6 +283,7 @@
 			children = (
 				43F1F68F289957F700CF3DAF /* EventsLoaderSpy.swift */,
 				43F1F691289959BE00CF3DAF /* EventsViewController+TestHelpers.swift */,
+				43F1F69328995A2C00CF3DAF /* EventCell+TestHelpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -418,6 +421,7 @@
 			files = (
 				437EAE042886E78900210E09 /* RemoteImageDataLoaderTests.swift in Sources */,
 				4311D83D288C52D100FD4D69 /* EventsViewControllerTests.swift in Sources */,
+				43F1F69428995A2C00CF3DAF /* EventCell+TestHelpers.swift in Sources */,
 				430468912889945F0096411E /* URLProtocolStub.swift in Sources */,
 				43F1F690289957F700CF3DAF /* EventsLoaderSpy.swift in Sources */,
 				437EAE0A2886FD9200210E09 /* URLSessionHTTPClientTests.swift in Sources */,
