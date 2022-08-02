@@ -9,16 +9,16 @@ import Foundation
 import UIKit
 
 public final class EventsUIComposer {
-    private init() {}
-    
     public static func eventsComposedWith(eventsLoader: EventsLoader, imageLoader: ImageDataLoader) -> EventsViewController {
         let bundle = Bundle(for: EventsViewController.self)
         let storyboard = UIStoryboard(name: "Events", bundle: bundle)
         let eventsController = storyboard.instantiateInitialViewController() as! EventsViewController
         let refreshController = eventsController.refreshController!
         
-        refreshController.eventsLoader = eventsLoader
-        refreshController.onRefresh = adaptEventsToCellControllers(forwardingTo: eventsController, imageLoader: imageLoader)
+        let mainQueueEventsLoader = MainQueueDispatchDecorator(decoratee: eventsLoader)
+        refreshController.eventsLoader = mainQueueEventsLoader
+        let mainQueueImageLoader = MainQueueDispatchDecorator(decoratee: imageLoader)
+        refreshController.onRefresh = adaptEventsToCellControllers(forwardingTo: eventsController, imageLoader: mainQueueImageLoader)
         
         return eventsController
     }
