@@ -22,7 +22,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: scene)
         let eventsLoader = VividSeatsAPIEventsLoader(url: vividSeatsAPIURL, httpClient: httpClient)
         let imageLoader = RemoteImageDataLoader(httpClient: httpClient)
-        let eventsVC = EventsUIComposer.eventsComposedWith(eventsLoader: eventsLoader, imageLoader: imageLoader)
+        let eventsVC = EventsUIComposer.eventsComposedWith(
+            eventsLoader: eventsLoader,
+            imageLoader: imageLoader,
+            currentDate: Date.init,
+            futureDate: {
+            Date(timeIntervalSinceNow: 60 * 60 * 24)
+        })
         window?.rootViewController = UINavigationController(rootViewController: eventsVC)
         window?.makeKeyAndVisible()
     }

@@ -9,7 +9,12 @@ import Foundation
 import UIKit
 
 public final class EventsUIComposer {
-    public static func eventsComposedWith(eventsLoader: EventsLoader, imageLoader: ImageDataLoader) -> EventsViewController {
+    public static func eventsComposedWith(
+        eventsLoader: EventsLoader,
+        imageLoader: ImageDataLoader,
+        currentDate: @escaping () -> Date,
+        futureDate: @escaping () -> Date
+    ) -> EventsViewController {
         let bundle = Bundle(for: EventsViewController.self)
         let storyboard = UIStoryboard(name: "Events", bundle: bundle)
         let eventsController = storyboard.instantiateInitialViewController() as! EventsViewController
@@ -19,6 +24,8 @@ public final class EventsUIComposer {
         refreshController.eventsLoader = mainQueueEventsLoader
         let mainQueueImageLoader = MainQueueDispatchDecorator(decoratee: imageLoader)
         refreshController.onRefresh = adaptEventsToCellControllers(forwardingTo: eventsController, imageLoader: mainQueueImageLoader)
+        refreshController.currentDate = currentDate
+        refreshController.futureDate = futureDate
         
         return eventsController
     }

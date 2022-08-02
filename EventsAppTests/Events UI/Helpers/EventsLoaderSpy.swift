@@ -10,21 +10,32 @@ import XCTest
 
 final class EventsLoaderSpy: EventsLoader, ImageDataLoader {
     // MARK: - EventsLoader
-    private var eventsRequests: [(EventsLoader.Result) -> Void] = []
+    private struct Request {
+        let startDate: Date
+        let endDate: Date
+        let completion: (EventsLoader.Result) -> Void
+    }
+    
+    private var eventsRequests: [Request] = []
     
     var loadCallCount: Int { eventsRequests.count }
     
     func load(startDate: Date, endDate: Date, completion: @escaping (EventsLoader.Result) -> Void) {
-        eventsRequests.append(completion)
+        eventsRequests.append(Request(startDate: startDate, endDate: endDate, completion: completion))
     }
     
     func complete(with events: [Event] = [], at index: Int) {
-        eventsRequests[index](.success(events))
+        eventsRequests[index].completion(.success(events))
     }
     
     func completeWithError(at index: Int) {
         let error = NSError(domain: "an error", code: 0)
-        eventsRequests[index](.failure(error))
+        eventsRequests[index].completion(.failure(error))
+    }
+    
+    func dates(at index: Int = 0) -> (startDate: Date, endDate: Date) {
+        let request = eventsRequests[index]
+        return (request.startDate, request.endDate)
     }
     
     // MARK: - ImageDataLoader

@@ -13,10 +13,14 @@ final class EventsRefreshController: NSObject {
     var eventsLoader: EventsLoader?
     
     var onRefresh: (([Event]) -> Void)?
+    var currentDate: (() -> Date)!
+    var futureDate: (() -> Date)!
         
     @IBAction func refresh() {
         view?.beginRefreshing()
-        eventsLoader?.load(startDate: Date(), endDate: Date()) { [weak self] result in
+        let now = currentDate()
+        let dateInTheFuture = futureDate()
+        eventsLoader?.load(startDate: now, endDate: dateInTheFuture) { [weak self] result in
             if let events = try? result.get() {
                 self?.onRefresh?(events)
             }

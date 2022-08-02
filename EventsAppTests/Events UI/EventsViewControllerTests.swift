@@ -16,6 +16,9 @@ class EventsViewControllerTests: XCTestCase {
         
         sut.loadViewIfNeeded()
         XCTAssertEqual(loader.loadCallCount, 1, "Expected a load request once view is loaded")
+        let capturedLoadDates = loader.dates(at: 0)
+        XCTAssertEqual(capturedLoadDates.startDate, startDate)
+        XCTAssertEqual(capturedLoadDates.endDate, endDate)
         
         sut.simulateUserInitiatedRefresh()
         XCTAssertEqual(loader.loadCallCount, 2, "Expected another load request once user initiates a load")
@@ -236,7 +239,12 @@ class EventsViewControllerTests: XCTestCase {
     
     private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: EventsViewController, loader: EventsLoaderSpy) {
         let loader = EventsLoaderSpy()
-        let sut = EventsUIComposer.eventsComposedWith(eventsLoader: loader, imageLoader: loader)
+        let sut = EventsUIComposer.eventsComposedWith(
+            eventsLoader: loader,
+            imageLoader: loader,
+            currentDate: { self.startDate },
+            futureDate: { self.endDate }
+        )
         trackForMemoryLeaks(loader)
         trackForMemoryLeaks(sut)
         return (sut, loader)
@@ -244,6 +252,14 @@ class EventsViewControllerTests: XCTestCase {
     
     private func anyImageData() -> Data {
         UIImage.make(withColor: .red).pngData()!
+    }
+    
+    private var startDate: Date {
+        Date(timeIntervalSince1970: 1658275200) // Wednesday, 20 July 2022 00:00:00
+    }
+    
+    private var endDate: Date {
+        Date(timeIntervalSince1970: 1658361600) // Thursday, 21 July 2022 00:00:00
     }
     
     private func makeEvent(suffix: String = "", count: Int = 1, imageURL: URL? = nil) -> Event {
