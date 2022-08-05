@@ -26,10 +26,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             eventsLoader: eventsLoader,
             imageLoader: imageLoader,
             currentDate: Date.init,
-            futureDate: {
-            Date(timeIntervalSinceNow: 60 * 60 * 24)
-        })
+            futureDate: Date.tomorrowAtSameTime)
         window?.rootViewController = UINavigationController(rootViewController: eventsVC)
         window?.makeKeyAndVisible()
     }
+}
+
+private extension Date {
+    static func tomorrowAtSameTime() -> Date { Date(timeIntervalSinceNow: .dayInSeconds) }
+}
+
+private extension TimeInterval {
+    static var dayInSeconds: TimeInterval { 60 * 60 * 24 }
 }

@@ -9,21 +9,15 @@ import UIKit
 
 @IBDesignable final class GradientView: UIView {
     @IBInspectable var firstColor: UIColor = .white {
-        didSet {
-            updateView()
-        }
+        didSet { updateView() }
     }
     
     @IBInspectable var secondColor: UIColor = .black {
-        didSet {
-            updateView()
-        }
+        didSet { updateView() }
     }
     
     override class var layerClass: AnyClass {
-       get {
-          return CAGradientLayer.self
-       }
+       get { CAGradientLayer.self }
     }
     
     private func updateView() {
