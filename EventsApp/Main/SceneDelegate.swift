@@ -17,6 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
     ) {
+        guard !isRunningUnitTests() else { return }
         guard let scene = (scene as? UIWindowScene) else { return }
         
         window = UIWindow(windowScene: scene)
@@ -38,4 +39,8 @@ private extension Date {
 
 private extension TimeInterval {
     static var dayInSeconds: TimeInterval { 60 * 60 * 24 }
+}
+
+private func isRunningUnitTests() -> Bool {
+    NSClassFromString("XCTestCase") != nil
 }
